@@ -1,0 +1,665 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="JavaScript,作用域," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="本文分析JS的函数作用域链，并从此角度理解闭包
+关于JS作用域，请阅读JavaScript的作用域和提升机制">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JS函数作用域链">
+<meta property="og:url" content="http://wentaoma.com/2016/08/05/JS-function-scope-chain/index.html">
+<meta property="og:site_name" content="Wentao">
+<meta property="og:description" content="本文分析JS的函数作用域链，并从此角度理解闭包
+关于JS作用域，请阅读JavaScript的作用域和提升机制">
+<meta property="og:image" content="http://wentaoma.com/2016/08/05/JS-function-scope-chain/js-function-scope-chain.png">
+<meta property="og:image" content="http://wentaoma.com/2016/08/05/JS-function-scope-chain/js-closure-scope-chain.png">
+<meta property="og:updated_time" content="2016-08-05T04:58:52.674Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="JS函数作用域链">
+<meta name="twitter:description" content="本文分析JS的函数作用域链，并从此角度理解闭包
+关于JS作用域，请阅读JavaScript的作用域和提升机制">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"hide"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://wentaoma.com/2016/08/05/JS-function-scope-chain/"/>
+
+  <title> JS函数作用域链 | Wentao </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Wentao</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">一条笨笨的代码狗</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="st-search-show-outputs">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <form class="site-search-form">
+  <input type="text" id="st-search-input" class="st-search-input st-default-search-input" />
+</form>
+
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+    (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+    e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install', '7CYqex9q7BhmVV3K1e1D','2.0.0');
+</script>
+
+
+
+    </div>
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                JS函数作用域链
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-08-05T10:55:10+08:00" content="2016-08-05">
+              2016-08-05
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/08/05/JS-function-scope-chain/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/08/05/JS-function-scope-chain/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>本文分析JS的函数作用域链，并从此角度理解闭包</p>
+<p>关于JS作用域，请阅读<a href="http://yanhaijing.com/javascript/2014/04/30/JavaScript-Scoping-and-Hoisting/" target="_blank" rel="external">JavaScript的作用域和提升机制</a><br><a id="more"></a></p>
+<h2 id="u51FD_u6570_u4F5C_u7528_u57DF_u94FE"><a href="#u51FD_u6570_u4F5C_u7528_u57DF_u94FE" class="headerlink" title="函数作用域链"></a>函数作用域链</h2><p>当某个函数第一次被调用时，会创建一个执行环境(execution context)以及相应作用域链(scope chain)。<br>然后使用this, arguments和函数中其它命名参数的值来初始化函数的活动对象(activation object)做变量对象使用并放在<br>作用域链的首位。而作用域链的终点则是全局执行环境的变量对象。</p>
+<p>对于每一个执行环境而言，都有一个表示(自己作用域中)变量(引用)的对象，称为变量对象。全局环境中变量对象<br>始终存在，而其它函数的变量对象只在执行过程中以活动对象形式存在。</p>
+<p>在函数执行过程中，就按作用域链的顺序查找变量。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">compare</span>(<span class="params">value1, value2</span>)</span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(value1 &lt; value2)&#123;</span><br><span class="line">        <span class="keyword">return</span> -<span class="number">1</span>;</span><br><span class="line">    &#125;<span class="keyword">else</span> <span class="keyword">if</span>(value1 &gt; value2)&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> result = compare(<span class="number">5</span>, <span class="number">10</span>);</span><br></pre></td></tr></table></figure>
+<p>上述代码在调用<code>compare(5, 10)</code>时，<code>compare</code>函数执行环境与作用域链如下图所示：</p>
+<img src="/2016/08/05/JS-function-scope-chain/js-function-scope-chain.png" alt="js-function-scope-chain.png" title="">
+<p>作用域链本质其实是一个指向变量对象的指针列表。</p>
+<p>实际上，在创建(声明)函数时，会预先创建一个包含全局变量对象的作用域链，保存在内部[[scope]]属性中。<br>在调用函数时，将[[scope]]中内容复制到函数执行环境作用域链中，并在作用域链前端添加当前函数活动对象。</p>
+<p>一般来说当函数执行完毕后其活动对象就会被销毁，内存中仅保存全局变量对象。但是闭包情况则是例外。</p>
+<h2 id="u51FD_u6570_u4F5C_u7528_u57DF_u94FE_u4E0E_u95ED_u5305"><a href="#u51FD_u6570_u4F5C_u7528_u57DF_u94FE_u4E0E_u95ED_u5305" class="headerlink" title="函数作用域链与闭包"></a>函数作用域链与闭包</h2><p>在一个函数内部定义的函数，在其创建(即外部函数执行)时，会将外部函数的活动对象添加到自己的作用域链[[scope]]中。<br>从而可以访问外部函数中定义的所有变量。<br>如果外部函数，这个内部函数被返回，因为内部函数作用域链仍然引用着外部函数活动对象，所以虽然外部函数在执行完毕后，<br>执行环境的作用域链会被销毁，但其活动对象仍然留在内存中。</p>
+<p>这种携带包含它的函数的作用域的函数也就是闭包。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">createComparisonFunction</span>(<span class="params">propertyName</span>)</span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params">object1, object2</span>)</span>&#123;</span><br><span class="line">        <span class="keyword">var</span> value1 = object1[propertyName];</span><br><span class="line">        <span class="keyword">var</span> value2 = object2[propertyName];</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span>(value1 &lt; value2)&#123;</span><br><span class="line">            <span class="keyword">return</span> -<span class="number">1</span>;</span><br><span class="line">        &#125;<span class="keyword">else</span> <span class="keyword">if</span>(value1 &gt; value2)&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//创建函数(闭包)</span></span><br><span class="line"><span class="keyword">var</span> compareNames = createComparisonFunction(<span class="string">"name"</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">//调用函数</span></span><br><span class="line"><span class="keyword">var</span> result = compareNames(&#123;name: <span class="string">"Amy"</span>&#125;, &#123;name: <span class="string">"Bob"</span>&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">//解除引用，以便释放内存</span></span><br><span class="line">compareNames = <span class="literal">null</span>;</span><br></pre></td></tr></table></figure>
+<p>上面代码中<code>compareNames</code>引用的匿名函数执行环境作用域链如下图所示：</p>
+<img src="/2016/08/05/JS-function-scope-chain/js-closure-scope-chain.png" alt="js-closure-scope-chain.png" title="">
+<h3 id="u6CE8_u610F_u4E8B_u9879"><a href="#u6CE8_u610F_u4E8B_u9879" class="headerlink" title="注意事项"></a>注意事项</h3><h4 id="1-__u95ED_u5305_u4E0E_u53D8_u91CF"><a href="#1-__u95ED_u5305_u4E0E_u53D8_u91CF" class="headerlink" title="1. 闭包与变量"></a>1. 闭包与变量</h4><p>闭包引用的外部函数的整个变量对象(活动对象)，(变量对象)其中保存着对函数内部所有变量的引用而不是变量的值，因而<br>其只能取得外部函数中变量在执行完后的最后一个值。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">createFunctions</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="keyword">var</span> result = [];</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">var</span> i=<span class="number">0</span>; i&lt;<span class="number">10</span>, i++)&#123;</span><br><span class="line">        result[i] = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">            <span class="keyword">return</span> i;</span><br><span class="line">        &#125;;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>因为这一点，上述函数返回的函数数组中每一个调用返回的i值都为10.</p>
+<h4 id="2-_this_u53D8_u91CF"><a href="#2-_this_u53D8_u91CF" class="headerlink" title="2. this变量"></a>2. this变量</h4><p>每个函数被调用时，其活动对象都会自动取得两个特殊变量：<code>this</code>,<code>arguments</code>。因此内部函数在作用域链上<br>搜索这两个变量时永远也不可能直接访问到外部函数中的这两个变量。不过可以通过将this保存在一个内部函数能够访问的<br>变量里，让其访问到该对象。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> name = <span class="string">"Window"</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> object = &#123;</span><br><span class="line">    name: <span class="string">"Object"</span>,</span><br><span class="line">    getNameFunction: <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">this</span>.name;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">alert(object.getNameFunction()()); <span class="comment">//"Window"</span></span><br></pre></td></tr></table></figure>
+<h4 id="3-__u5185_u5B58_u6CC4_u6F0F"><a href="#3-__u5185_u5B58_u6CC4_u6F0F" class="headerlink" title="3. 内存泄漏"></a>3. 内存泄漏</h4><p>IE9以前版本对JS对象和DOM对象使用不同垃圾回收例程。在这些IE版本中如果闭包作用域链保存这HTML元素，<br>则该元素无法被正确回收。</p>
+<h2 id="u76F8_u5173_u6587_u7AE0"><a href="#u76F8_u5173_u6587_u7AE0" class="headerlink" title="相关文章"></a>相关文章</h2><p><a href="http://wwsun.github.io/posts/scope-and-context-in-javascript.html" target="_blank" rel="external">理解JavaScript中的作用域和上下文</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/JavaScript/" rel="tag">#JavaScript</a>
+          
+            <a href="/tags/作用域/" rel="tag">#作用域</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/08/04/JS-inherit-conclusion/" rel="next" title="JS继承方式总结">
+                <i class="fa fa-chevron-left"></i> JS继承方式总结
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <div class="ds-share flat" data-thread-key="2016/08/05/JS-function-scope-chain/"
+     data-title="JS函数作用域链"
+     data-content=""
+     data-url="http://wentaoma.com/2016/08/05/JS-function-scope-chain/">
+  <div class="ds-share-inline">
+    <ul  class="ds-share-icons-16">
+
+      <li data-toggle="ds-share-icons-more"><a class="ds-more" href="javascript:void(0);">分享到：</a></li>
+      <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+      <li><a class="ds-qzone" href="javascript:void(0);" data-service="qzone">QQ空间</a></li>
+      <li><a class="ds-qqt" href="javascript:void(0);" data-service="qqt">腾讯微博</a></li>
+      <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+
+    </ul>
+    <div class="ds-share-icons-more">
+    </div>
+  </div>
+</div>
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/08/05/JS-function-scope-chain/"
+           data-title="JS函数作用域链" data-url="http://wentaoma.com/2016/08/05/JS-function-scope-chain/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/uploads/avatar.jpg"
+               alt="Wentao MA" />
+          <p class="site-author-name" itemprop="name">Wentao MA</p>
+          <p class="site-description motion-element" itemprop="description">趴着，不动，写代码</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">3</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#u51FD_u6570_u4F5C_u7528_u57DF_u94FE"><span class="nav-number">1.</span> <span class="nav-text">函数作用域链</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#u51FD_u6570_u4F5C_u7528_u57DF_u94FE_u4E0E_u95ED_u5305"><span class="nav-number">2.</span> <span class="nav-text">函数作用域链与闭包</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#u6CE8_u610F_u4E8B_u9879"><span class="nav-number">2.1.</span> <span class="nav-text">注意事项</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-__u95ED_u5305_u4E0E_u53D8_u91CF"><span class="nav-number">2.1.1.</span> <span class="nav-text">1. 闭包与变量</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-_this_u53D8_u91CF"><span class="nav-number">2.1.2.</span> <span class="nav-text">2. this变量</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-__u5185_u5B58_u6CC4_u6F0F"><span class="nav-number">2.1.3.</span> <span class="nav-text">3. 内存泄漏</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#u76F8_u5173_u6587_u7AE0"><span class="nav-number">3.</span> <span class="nav-text">相关文章</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Wentao MA</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"wentaoma"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    <script src="/vendors/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
