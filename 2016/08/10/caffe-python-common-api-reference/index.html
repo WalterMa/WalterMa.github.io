@@ -1,0 +1,662 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Caffe,Python," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="本文整理了pycaffe中常用的API">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Caffe-Python接口常用API参考">
+<meta property="og:url" content="http://wentaoma.com/2016/08/10/caffe-python-common-api-reference/index.html">
+<meta property="og:site_name" content="Wentao">
+<meta property="og:description" content="本文整理了pycaffe中常用的API">
+<meta property="og:updated_time" content="2016-08-15T03:55:32.033Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Caffe-Python接口常用API参考">
+<meta name="twitter:description" content="本文整理了pycaffe中常用的API">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"hide"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://wentaoma.com/2016/08/10/caffe-python-common-api-reference/"/>
+
+  <title> Caffe-Python接口常用API参考 | Wentao </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Wentao</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">一条笨笨的代码狗</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="st-search-show-outputs">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <form class="site-search-form">
+  <input type="text" id="st-search-input" class="st-search-input st-default-search-input" />
+</form>
+
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+    (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+    e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install', '7CYqex9q7BhmVV3K1e1D','2.0.0');
+</script>
+
+
+
+    </div>
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Caffe-Python接口常用API参考
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-08-10T16:18:23+08:00" content="2016-08-10">
+              2016-08-10
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/08/10/caffe-python-common-api-reference/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/08/10/caffe-python-common-api-reference/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>本文整理了pycaffe中常用的API<br><a id="more"></a></p>
+<h2 id="Packages_u5BFC_u5165"><a href="#Packages_u5BFC_u5165" class="headerlink" title="Packages导入"></a>Packages导入</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> caffe</span><br><span class="line"><span class="keyword">from</span> caffe <span class="keyword">import</span> layers <span class="keyword">as</span> L</span><br><span class="line"><span class="keyword">from</span> caffe <span class="keyword">import</span> params <span class="keyword">as</span> P</span><br></pre></td></tr></table></figure>
+<h2 id="Layers_u5B9A_u4E49"><a href="#Layers_u5B9A_u4E49" class="headerlink" title="Layers定义"></a>Layers定义</h2><h3 id="Data_u5C42_u5B9A_u4E49"><a href="#Data_u5C42_u5B9A_u4E49" class="headerlink" title="Data层定义"></a>Data层定义</h3><h4 id="lmdb/leveldb_Data_u5C42_u5B9A_u4E49"><a href="#lmdb/leveldb_Data_u5C42_u5B9A_u4E49" class="headerlink" title="lmdb/leveldb Data层定义"></a>lmdb/leveldb Data层定义</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">L.Data( </span><br><span class="line">        source=lmdb,</span><br><span class="line">        backend=P.Data.LMDB,</span><br><span class="line">        batch_size=batch_size, ntop=<span class="number">2</span>,</span><br><span class="line">        transform_param=dict(</span><br><span class="line">                              crop_size=<span class="number">227</span>,</span><br><span class="line">                              mean_value=[<span class="number">104</span>, <span class="number">117</span>, <span class="number">123</span>],</span><br><span class="line">                              mirror=<span class="keyword">True</span></span><br><span class="line">                              )</span><br><span class="line">        )</span><br></pre></td></tr></table></figure>
+<h4 id="HDF5_Data_u5C42_u5B9A_u4E49"><a href="#HDF5_Data_u5C42_u5B9A_u4E49" class="headerlink" title="HDF5 Data层定义"></a>HDF5 Data层定义</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">L.HDF5Data(</span><br><span class="line">            hdf5_data_param=&#123;</span><br><span class="line">                            <span class="string">'source'</span>: <span class="string">'./training_data_paths.txt'</span>,  </span><br><span class="line">                            <span class="string">'batch_size'</span>: <span class="number">64</span></span><br><span class="line">                            &#125;,</span><br><span class="line">            include=&#123;</span><br><span class="line">                    <span class="string">'phase'</span>: caffe.TRAIN</span><br><span class="line">                    &#125;</span><br><span class="line">            )</span><br></pre></td></tr></table></figure>
+<h4 id="ImageData_Data_u5C42_u5B9A_u4E49"><a href="#ImageData_Data_u5C42_u5B9A_u4E49" class="headerlink" title="ImageData Data层定义"></a>ImageData Data层定义</h4><p>适用于txt文件一行记录一张图片的数据源</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">L.ImageData(</span><br><span class="line">                source=list_path,</span><br><span class="line">                batch_size=batch_size,</span><br><span class="line">                new_width=<span class="number">48</span>,</span><br><span class="line">                new_height=<span class="number">48</span>,</span><br><span class="line">                ntop=<span class="number">2</span>,</span><br><span class="line">                ransform_param=dict(crop_size=<span class="number">40</span>,mirror=<span class="keyword">True</span>)</span><br><span class="line">                )</span><br></pre></td></tr></table></figure>
+<h3 id="Convloution_u5C42_u5B9A_u4E49"><a href="#Convloution_u5C42_u5B9A_u4E49" class="headerlink" title="Convloution层定义"></a>Convloution层定义</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">L.Convolution(  </span><br><span class="line">                bottom, </span><br><span class="line">                kernel_size=ks, </span><br><span class="line">                stride=stride,</span><br><span class="line">                num_output=nout, </span><br><span class="line">                pad=pad, </span><br><span class="line">                group=group</span><br><span class="line">                )</span><br></pre></td></tr></table></figure>
+<h3 id="LRN_u5C42_u5B9A_u4E49"><a href="#LRN_u5C42_u5B9A_u4E49" class="headerlink" title="LRN层定义"></a>LRN层定义</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">L.LRN(</span><br><span class="line">        bottom, </span><br><span class="line">        local_size=<span class="number">5</span>, </span><br><span class="line">        alpha=<span class="number">1e-4</span>, </span><br><span class="line">        beta=<span class="number">0.75</span></span><br><span class="line">        )</span><br></pre></td></tr></table></figure>
+<h3 id="Activation_u5C42_u5B9A_u4E49"><a href="#Activation_u5C42_u5B9A_u4E49" class="headerlink" title="Activation层定义"></a>Activation层定义</h3><h4 id="ReLU_u5C42_u5B9A_u4E49"><a href="#ReLU_u5C42_u5B9A_u4E49" class="headerlink" title="ReLU层定义"></a>ReLU层定义</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">L.ReLU(</span><br><span class="line">        bottom, </span><br><span class="line">        in_place=<span class="keyword">True</span></span><br><span class="line">        )</span><br></pre></td></tr></table></figure>
+<h3 id="Pooling_u5C42_u5B9A_u4E49"><a href="#Pooling_u5C42_u5B9A_u4E49" class="headerlink" title="Pooling层定义"></a>Pooling层定义</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">L.Pooling(</span><br><span class="line">            bottom,</span><br><span class="line">            pool=P.Pooling.MAX, </span><br><span class="line">            kernel_size=ks, </span><br><span class="line">            stride=stride</span><br><span class="line">            )</span><br></pre></td></tr></table></figure>
+<h3 id="FullConnect_u5C42_u5B9A_u4E49"><a href="#FullConnect_u5C42_u5B9A_u4E49" class="headerlink" title="FullConnect层定义"></a>FullConnect层定义</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">L.InnerProduct(</span><br><span class="line">                bottom, </span><br><span class="line">                num_output=nout</span><br><span class="line">                )</span><br></pre></td></tr></table></figure>
+<h3 id="Dropout_u5C42_u5B9A_u4E49"><a href="#Dropout_u5C42_u5B9A_u4E49" class="headerlink" title="Dropout层定义"></a>Dropout层定义</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">L.Dropout(</span><br><span class="line">            bottom, </span><br><span class="line">            in_place=<span class="keyword">True</span></span><br><span class="line">            )</span><br></pre></td></tr></table></figure>
+<h3 id="Loss_u5C42_u5B9A_u4E49"><a href="#Loss_u5C42_u5B9A_u4E49" class="headerlink" title="Loss层定义"></a>Loss层定义</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">L.SoftmaxWithLoss(</span><br><span class="line">                    bottom, </span><br><span class="line">                    label</span><br><span class="line">                    )</span><br></pre></td></tr></table></figure>
+<h3 id="Accuracy_u5C42_u5B9A_u4E49"><a href="#Accuracy_u5C42_u5B9A_u4E49" class="headerlink" title="Accuracy层定义"></a>Accuracy层定义</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">L.Accuracy(</span><br><span class="line">            bottom,</span><br><span class="line">            label</span><br><span class="line">            )</span><br></pre></td></tr></table></figure>
+<h3 id="u8F6C_u6362_u4E3Aproto_u6587_u672C"><a href="#u8F6C_u6362_u4E3Aproto_u6587_u672C" class="headerlink" title="转换为proto文本"></a>转换为proto文本</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">caffe.to_proto(</span><br><span class="line">                loss, </span><br><span class="line">                acc     <span class="comment">#训练阶段可以删去Accuracy层</span></span><br><span class="line">                )</span><br></pre></td></tr></table></figure>
+<h2 id="Solver_u5B9A_u4E49"><a href="#Solver_u5B9A_u4E49" class="headerlink" title="Solver定义"></a>Solver定义</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> caffe.proto <span class="keyword">import</span> caffe_pb2</span><br><span class="line"></span><br><span class="line">s = caffe_pb2.SolverParameter()</span><br><span class="line"></span><br><span class="line">path=<span class="string">'/home/xxx/data/'</span></span><br><span class="line">solver_file=path+<span class="string">'solver.prototxt'</span>     <span class="comment">#solver文件保存位置</span></span><br><span class="line"></span><br><span class="line">s.train_net = path+<span class="string">'train.prototxt'</span>     <span class="comment"># 训练配置文件</span></span><br><span class="line">s.test_net.append(path+<span class="string">'val.prototxt'</span>)  <span class="comment"># 测试配置文件</span></span><br><span class="line">s.test_interval = <span class="number">782</span>                   <span class="comment"># 测试间隔</span></span><br><span class="line">s.test_iter.append(<span class="number">313</span>)                 <span class="comment"># 测试迭代次数</span></span><br><span class="line">s.max_iter = <span class="number">78200</span>                      <span class="comment"># 最大迭代次数</span></span><br><span class="line"></span><br><span class="line">s.base_lr = <span class="number">0.001</span>                       <span class="comment"># 基础学习率</span></span><br><span class="line">s.momentum = <span class="number">0.9</span>                        <span class="comment"># momentum系数</span></span><br><span class="line">s.weight_decay = <span class="number">5e-4</span>                   <span class="comment"># 权值衰减系数</span></span><br><span class="line">s.lr_policy = <span class="string">'step'</span>                    <span class="comment"># 学习率衰减方法</span></span><br><span class="line">s.stepsize=<span class="number">26067</span>                        <span class="comment"># 此值仅对step方法有效</span></span><br><span class="line">s.gamma = <span class="number">0.1</span>                           <span class="comment"># 学习率衰减指数</span></span><br><span class="line">s.display = <span class="number">782</span>                         <span class="comment"># 屏幕日志显示间隔</span></span><br><span class="line">s.snapshot = <span class="number">7820</span></span><br><span class="line">s.snapshot_prefix = <span class="string">'shapshot'</span></span><br><span class="line">s.type = “SGD”                          <span class="comment"># 优化算法</span></span><br><span class="line">s.solver_mode = caffe_pb2.SolverParameter.GPU</span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> open(solver_file, <span class="string">'w'</span>) <span class="keyword">as</span> f:</span><br><span class="line">    f.write(str(s))</span><br></pre></td></tr></table></figure>
+<h2 id="Model_u8BAD_u7EC3"><a href="#Model_u8BAD_u7EC3" class="headerlink" title="Model训练"></a>Model训练</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 训练设置</span></span><br><span class="line"><span class="comment"># 使用GPU</span></span><br><span class="line">caffe.set_device(gpu_id) <span class="comment"># 若不设置,默认为0</span></span><br><span class="line">caffe.set_mode_gpu()</span><br><span class="line"><span class="comment"># 使用CPU</span></span><br><span class="line">caffe.set_mode_cpu()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 加载Solver，有两种常用方法</span></span><br><span class="line"><span class="comment"># 1. 无论模型中Slover类型是什么统一设置为SGD</span></span><br><span class="line">solver = caffe.SGDSolver(<span class="string">'/home/xxx/data/solver.prototxt'</span>) </span><br><span class="line"><span class="comment"># 2. 根据solver的prototxt中solver_type读取，默认为SGD</span></span><br><span class="line">solver = caffe.get_solver(<span class="string">'/home/xxx/data/solver.prototxt'</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 训练模型</span></span><br><span class="line"><span class="comment"># 1.1 前向传播</span></span><br><span class="line">solver.net.forward()  <span class="comment"># train net</span></span><br><span class="line">solver.test_nets[<span class="number">0</span>].forward()  <span class="comment"># test net (there can be more than one)</span></span><br><span class="line"><span class="comment"># 1.2 反向传播,计算梯度</span></span><br><span class="line">solver.net.backward()</span><br><span class="line"><span class="comment"># 2. 进行一次前向传播一次反向传播并根据梯度更新参数</span></span><br><span class="line">solver.step(<span class="number">1</span>)</span><br><span class="line"><span class="comment"># 3. 根据solver文件中设置进行完整model训练</span></span><br><span class="line">solver.solve()</span><br></pre></td></tr></table></figure>
+<p>如果想在训练过程中保存模型参数，调用</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">solver.net.save(<span class="string">'mymodel.caffemodel'</span>)</span><br></pre></td></tr></table></figure>
+<h2 id="u5206_u7C7B_u56FE_u7247"><a href="#u5206_u7C7B_u56FE_u7247" class="headerlink" title="分类图片"></a>分类图片</h2><h3 id="u52A0_u8F7DModel_u6570_u636E"><a href="#u52A0_u8F7DModel_u6570_u636E" class="headerlink" title="加载Model数据"></a>加载Model数据</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">net = caffe.Net(</span><br><span class="line">        deploy_prototxt_path,   <span class="comment"># 用于分类的网络定义文件路径</span></span><br><span class="line">        caffe_model_path,       <span class="comment"># 训练好模型路径</span></span><br><span class="line">        caffe.TEST              <span class="comment"># 设置为测试阶段</span></span><br><span class="line">        )</span><br></pre></td></tr></table></figure>
+<h3 id="u4E2D_u503C_u6587_u4EF6_u8F6C_u6362"><a href="#u4E2D_u503C_u6587_u4EF6_u8F6C_u6362" class="headerlink" title="中值文件转换"></a>中值文件转换</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#　编写一个函数，将二进制的均值转换为python的均值</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">convert_mean</span><span class="params">(binMean,npyMean)</span>:</span></span><br><span class="line">    blob = caffe.proto.caffe_pb2.BlobProto()</span><br><span class="line">    bin_mean = open(binMean, <span class="string">'rb'</span> ).read()</span><br><span class="line">    blob.ParseFromString(bin_mean)</span><br><span class="line">    arr = np.array( caffe.io.blobproto_to_array(blob) )</span><br><span class="line">    npy_mean = arr[<span class="number">0</span>]</span><br><span class="line">    np.save(npyMean, npy_mean )</span><br><span class="line"></span><br><span class="line"><span class="comment"># 调用函数转换均值</span></span><br><span class="line">binMean=<span class="string">'examples/cifar10/mean.binaryproto'</span></span><br><span class="line">npyMean=<span class="string">'examples/cifar10/mean.npy'</span></span><br><span class="line">convert_mean(binMean,npyMean)</span><br></pre></td></tr></table></figure>
+<h3 id="u56FE_u7247_u9884_u5904_u7406"><a href="#u56FE_u7247_u9884_u5904_u7406" class="headerlink" title="图片预处理"></a>图片预处理</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 设定图片的shape格式为网络data层格式</span></span><br><span class="line">transformer = caffe.io.Transformer(&#123;<span class="string">'data'</span>: net.blobs[<span class="string">'data'</span>].data.shape&#125;)</span><br><span class="line"><span class="comment"># 改变维度的顺序，由原始图片维度(width, height, channel)变为(channel, width, height)</span></span><br><span class="line">transformer.set_transpose(<span class="string">'data'</span>, (<span class="number">2</span>,<span class="number">0</span>,<span class="number">1</span>)) </span><br><span class="line"><span class="comment"># 减去均值,注意要先将binaryproto格式均值文件转换为npy格式[此步根据训练model时设置可选]</span></span><br><span class="line">transformer.set_mean(<span class="string">'data'</span>, np.load(mean_file_path).mean(<span class="number">1</span>).mean(<span class="number">1</span>))</span><br><span class="line"><span class="comment"># 缩放到[0，255]之间</span></span><br><span class="line">transformer.set_raw_scale(<span class="string">'data'</span>, <span class="number">255</span>)</span><br><span class="line"><span class="comment"># 交换通道，将图片由RGB变为BGR</span></span><br><span class="line">transformer.set_channel_swap(<span class="string">'data'</span>, (<span class="number">2</span>,<span class="number">1</span>,<span class="number">0</span>))</span><br><span class="line"></span><br><span class="line"><span class="comment"># 加载图片</span></span><br><span class="line">im=caffe.io.load_image(img)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 执行上面设置的图片预处理操作，并将图片载入到blob中</span></span><br><span class="line">net.blobs[<span class="string">'data'</span>].data[...] = transformer.preprocess(<span class="string">'data'</span>,im)</span><br></pre></td></tr></table></figure>
+<h3 id="u6267_u884C_u6D4B_u8BD5"><a href="#u6267_u884C_u6D4B_u8BD5" class="headerlink" title="执行测试"></a>执行测试</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#执行测试</span></span><br><span class="line">out = net.forward()</span><br><span class="line"></span><br><span class="line">labels = np.loadtxt(labels_filename, str, delimiter=<span class="string">'\t'</span>)   <span class="comment">#读取类别名称文件</span></span><br><span class="line">prob= net.blobs[<span class="string">'Softmax1'</span>].data[<span class="number">0</span>].flatten() <span class="comment">#取出最后一层（Softmax）属于某个类别的概率值，并打印</span></span><br><span class="line"><span class="keyword">print</span> prob</span><br><span class="line">order=prob.argsort()[<span class="number">0</span>]  <span class="comment">#将概率值排序，取出最大值所在的序号 </span></span><br><span class="line"><span class="keyword">print</span> <span class="string">'the class is:'</span>,labels[order]   <span class="comment">#将该序号转换成对应的类别名称，并打印</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 取出前五个较大值所在的序号</span></span><br><span class="line">top_inds = prob.argsort()[::-<span class="number">1</span>][:<span class="number">5</span>]</span><br><span class="line"><span class="keyword">print</span> <span class="string">'probabilities and labels:'</span> zip(prob[top_inds], labels[top_inds])</span><br></pre></td></tr></table></figure>
+<h3 id="u5404_u5C42_u4FE1_u606F_u663E_u793A"><a href="#u5404_u5C42_u4FE1_u606F_u663E_u793A" class="headerlink" title="各层信息显示"></a>各层信息显示</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># params显示：layer名，w，b</span></span><br><span class="line"><span class="keyword">for</span> layer_name, param <span class="keyword">in</span> net.params.items():</span><br><span class="line">    <span class="keyword">print</span> layer_name + <span class="string">'\t'</span> + str(param[<span class="number">0</span>].data.shape), str(param[<span class="number">1</span>].data.shape)</span><br><span class="line"></span><br><span class="line"><span class="comment"># blob显示：layer名，输出的blob维度</span></span><br><span class="line"><span class="keyword">for</span> layer_name, blob <span class="keyword">in</span> net.blobs.items():</span><br><span class="line">    <span class="keyword">print</span> layer_name + <span class="string">'\t'</span> + str(blob.data.shape)</span><br></pre></td></tr></table></figure>
+<h3 id="u81EA_u5B9A_u4E49_u51FD_u6570_3A_u53C2_u6570/_u5377_u79EF_u7ED3_u679C_u53EF_u89C6_u5316"><a href="#u81EA_u5B9A_u4E49_u51FD_u6570_3A_u53C2_u6570/_u5377_u79EF_u7ED3_u679C_u53EF_u89C6_u5316" class="headerlink" title="自定义函数:参数/卷积结果可视化"></a>自定义函数:参数/卷积结果可视化</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">import</span> matplotlib.image <span class="keyword">as</span> mpimg</span><br><span class="line"><span class="keyword">import</span> caffe</span><br><span class="line">%matplotlib inline</span><br><span class="line"></span><br><span class="line">plt.rcParams[<span class="string">'figure.figsize'</span>] = (<span class="number">8</span>, <span class="number">8</span>)</span><br><span class="line">plt.rcParams[<span class="string">'image.interpolation'</span>] = <span class="string">'nearest'</span></span><br><span class="line">plt.rcParams[<span class="string">'image.cmap'</span>] = <span class="string">'gray'</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">show_data</span><span class="params">(data, padsize=<span class="number">1</span>, padval=<span class="number">0</span>)</span>:</span></span><br><span class="line"><span class="string">"""Take an array of shape (n, height, width) or (n, height, width, 3)</span><br><span class="line">       and visualize each (height, width) thing in a grid of size approx. sqrt(n) by sqrt(n)"""</span></span><br><span class="line">    <span class="comment"># data归一化</span></span><br><span class="line">    data -= data.min()</span><br><span class="line">    data /= data.max()</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 根据data中图片数量data.shape[0]，计算最后输出时每行每列图片数n</span></span><br><span class="line">    n = int(np.ceil(np.sqrt(data.shape[<span class="number">0</span>])))</span><br><span class="line">    <span class="comment"># padding = ((图片个数维度的padding),(图片高的padding), (图片宽的padding), ....)</span></span><br><span class="line">    padding = ((<span class="number">0</span>, n ** <span class="number">2</span> - data.shape[<span class="number">0</span>]), (<span class="number">0</span>, padsize), (<span class="number">0</span>, padsize)) + ((<span class="number">0</span>, <span class="number">0</span>),) * (data.ndim - <span class="number">3</span>)</span><br><span class="line">    data = np.pad(data, padding, mode=<span class="string">'constant'</span>, constant_values=(padval, padval))</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 先将padding后的data分成n*n张图像</span></span><br><span class="line">    data = data.reshape((n, n) + data.shape[<span class="number">1</span>:]).transpose((<span class="number">0</span>, <span class="number">2</span>, <span class="number">1</span>, <span class="number">3</span>) + tuple(range(<span class="number">4</span>, data.ndim + <span class="number">1</span>)))</span><br><span class="line">    <span class="comment"># 再将（n, W, n, H）变换成(n*w, n*H)</span></span><br><span class="line">    data = data.reshape((n * data.shape[<span class="number">1</span>], n * data.shape[<span class="number">3</span>]) + data.shape[<span class="number">4</span>:])</span><br><span class="line">    plt.figure()</span><br><span class="line">    plt.imshow(data,cmap=<span class="string">'gray'</span>)</span><br><span class="line">    plt.axis(<span class="string">'off'</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 示例：显示第一个卷积层的输出数据和权值（filter）</span></span><br><span class="line"><span class="keyword">print</span> net.blobs[<span class="string">'conv1'</span>].data[<span class="number">0</span>].shape</span><br><span class="line">show_data(net.blobs[<span class="string">'conv1'</span>].data[<span class="number">0</span>])</span><br><span class="line"><span class="keyword">print</span> net.params[<span class="string">'conv1'</span>][<span class="number">0</span>].data.shape</span><br><span class="line">show_data(net.params[<span class="string">'conv1'</span>][<span class="number">0</span>].data.reshape(<span class="number">32</span>*<span class="number">3</span>,<span class="number">5</span>,<span class="number">5</span>))</span><br></pre></td></tr></table></figure>
+<h3 id="u81EA_u5B9A_u4E49_uFF1A_u8BAD_u7EC3_u8FC7_u7A0BLoss_26amp_3BAccuracy_u53EF_u89C6_u5316"><a href="#u81EA_u5B9A_u4E49_uFF1A_u8BAD_u7EC3_u8FC7_u7A0BLoss_26amp_3BAccuracy_u53EF_u89C6_u5316" class="headerlink" title="自定义：训练过程Loss&amp;Accuracy可视化"></a>自定义：训练过程Loss&amp;Accuracy可视化</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt  </span><br><span class="line"><span class="keyword">import</span> caffe   </span><br><span class="line">caffe.set_device(<span class="number">0</span>)  </span><br><span class="line">caffe.set_mode_gpu()   </span><br><span class="line"><span class="comment"># 使用SGDSolver，即随机梯度下降算法  </span></span><br><span class="line">solver = caffe.SGDSolver(<span class="string">'/home/xxx/mnist/solver.prototxt'</span>)  </span><br><span class="line">  </span><br><span class="line"><span class="comment"># 等价于solver文件中的max_iter，即最大解算次数  </span></span><br><span class="line">niter = <span class="number">10000</span> </span><br><span class="line"></span><br><span class="line"><span class="comment"># 每隔100次收集一次loss数据  </span></span><br><span class="line">display= <span class="number">100</span>  </span><br><span class="line">  </span><br><span class="line"><span class="comment"># 每次测试进行100次解算 </span></span><br><span class="line">test_iter = <span class="number">100</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 每500次训练进行一次测试</span></span><br><span class="line">test_interval =<span class="number">500</span></span><br><span class="line">  </span><br><span class="line"><span class="comment">#初始化 </span></span><br><span class="line">train_loss = zeros(ceil(niter * <span class="number">1.0</span> / display))   </span><br><span class="line">test_loss = zeros(ceil(niter * <span class="number">1.0</span> / test_interval))  </span><br><span class="line">test_acc = zeros(ceil(niter * <span class="number">1.0</span> / test_interval))  </span><br><span class="line">  </span><br><span class="line"><span class="comment"># 辅助变量  </span></span><br><span class="line">_train_loss = <span class="number">0</span>; _test_loss = <span class="number">0</span>; _accuracy = <span class="number">0</span>  </span><br><span class="line"><span class="comment"># 进行解算  </span></span><br><span class="line"><span class="keyword">for</span> it <span class="keyword">in</span> range(niter):  </span><br><span class="line">    <span class="comment"># 进行一次解算  </span></span><br><span class="line">    solver.step(<span class="number">1</span>)  </span><br><span class="line">    <span class="comment"># 统计train loss  </span></span><br><span class="line">    _train_loss += solver.net.blobs[<span class="string">'SoftmaxWithLoss1'</span>].data  </span><br><span class="line">    <span class="keyword">if</span> it % display == <span class="number">0</span>:  </span><br><span class="line">        <span class="comment"># 计算平均train loss  </span></span><br><span class="line">        train_loss[it // display] = _train_loss / display  </span><br><span class="line">        _train_loss = <span class="number">0</span>  </span><br><span class="line">  </span><br><span class="line">    <span class="keyword">if</span> it % test_interval == <span class="number">0</span>:  </span><br><span class="line">        <span class="keyword">for</span> test_it <span class="keyword">in</span> range(test_iter):  </span><br><span class="line">            <span class="comment"># 进行一次测试  </span></span><br><span class="line">            solver.test_nets[<span class="number">0</span>].forward()  </span><br><span class="line">            <span class="comment"># 计算test loss  </span></span><br><span class="line">            _test_loss += solver.test_nets[<span class="number">0</span>].blobs[<span class="string">'SoftmaxWithLoss1'</span>].data  </span><br><span class="line">            <span class="comment"># 计算test accuracy  </span></span><br><span class="line">            _accuracy += solver.test_nets[<span class="number">0</span>].blobs[<span class="string">'Accuracy1'</span>].data  </span><br><span class="line">        <span class="comment"># 计算平均test loss  </span></span><br><span class="line">        test_loss[it / test_interval] = _test_loss / test_iter  </span><br><span class="line">        <span class="comment"># 计算平均test accuracy  </span></span><br><span class="line">        test_acc[it / test_interval] = _accuracy / test_iter  </span><br><span class="line">        _test_loss = <span class="number">0</span>  </span><br><span class="line">        _accuracy = <span class="number">0</span>  </span><br><span class="line">  </span><br><span class="line"><span class="comment"># 绘制train loss、test loss和accuracy曲线  </span></span><br><span class="line"><span class="keyword">print</span> <span class="string">'\nplot the train loss and test accuracy\n'</span>  </span><br><span class="line">_, ax1 = plt.subplots()  </span><br><span class="line">ax2 = ax1.twinx()  </span><br><span class="line">  </span><br><span class="line"><span class="comment"># train loss -&gt; 绿色  </span></span><br><span class="line">ax1.plot(display * arange(len(train_loss)), train_loss, <span class="string">'g'</span>)  </span><br><span class="line"><span class="comment"># test loss -&gt; 黄色  </span></span><br><span class="line">ax1.plot(test_interval * arange(len(test_loss)), test_loss, <span class="string">'y'</span>)  </span><br><span class="line"><span class="comment"># test accuracy -&gt; 红色  </span></span><br><span class="line">ax2.plot(test_interval * arange(len(test_acc)), test_acc, <span class="string">'r'</span>)  </span><br><span class="line">  </span><br><span class="line">ax1.set_xlabel(<span class="string">'iteration'</span>)  </span><br><span class="line">ax1.set_ylabel(<span class="string">'loss'</span>)  </span><br><span class="line">ax2.set_ylabel(<span class="string">'accuracy'</span>)  </span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Caffe/" rel="tag">#Caffe</a>
+          
+            <a href="/tags/Python/" rel="tag">#Python</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/08/08/caffe-cifar10-model-visualization-with-python/" rel="next" title="使用Caffe的Python接口进行Cifar10可视化">
+                <i class="fa fa-chevron-left"></i> 使用Caffe的Python接口进行Cifar10可视化
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <div class="ds-share flat" data-thread-key="2016/08/10/caffe-python-common-api-reference/"
+     data-title="Caffe-Python接口常用API参考"
+     data-content=""
+     data-url="http://wentaoma.com/2016/08/10/caffe-python-common-api-reference/">
+  <div class="ds-share-inline">
+    <ul  class="ds-share-icons-16">
+
+      <li data-toggle="ds-share-icons-more"><a class="ds-more" href="javascript:void(0);">分享到：</a></li>
+      <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+      <li><a class="ds-qzone" href="javascript:void(0);" data-service="qzone">QQ空间</a></li>
+      <li><a class="ds-qqt" href="javascript:void(0);" data-service="qqt">腾讯微博</a></li>
+      <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+
+    </ul>
+    <div class="ds-share-icons-more">
+    </div>
+  </div>
+</div>
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/08/10/caffe-python-common-api-reference/"
+           data-title="Caffe-Python接口常用API参考" data-url="http://wentaoma.com/2016/08/10/caffe-python-common-api-reference/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/uploads/avatar.jpg"
+               alt="Wentao MA" />
+          <p class="site-author-name" itemprop="name">Wentao MA</p>
+          <p class="site-description motion-element" itemprop="description">趴着，不动，写代码</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">5</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">7</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Packages_u5BFC_u5165"><span class="nav-number">1.</span> <span class="nav-text">Packages导入</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Layers_u5B9A_u4E49"><span class="nav-number">2.</span> <span class="nav-text">Layers定义</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Data_u5C42_u5B9A_u4E49"><span class="nav-number">2.1.</span> <span class="nav-text">Data层定义</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#lmdb/leveldb_Data_u5C42_u5B9A_u4E49"><span class="nav-number">2.1.1.</span> <span class="nav-text">lmdb/leveldb Data层定义</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#HDF5_Data_u5C42_u5B9A_u4E49"><span class="nav-number">2.1.2.</span> <span class="nav-text">HDF5 Data层定义</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ImageData_Data_u5C42_u5B9A_u4E49"><span class="nav-number">2.1.3.</span> <span class="nav-text">ImageData Data层定义</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Convloution_u5C42_u5B9A_u4E49"><span class="nav-number">2.2.</span> <span class="nav-text">Convloution层定义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#LRN_u5C42_u5B9A_u4E49"><span class="nav-number">2.3.</span> <span class="nav-text">LRN层定义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Activation_u5C42_u5B9A_u4E49"><span class="nav-number">2.4.</span> <span class="nav-text">Activation层定义</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#ReLU_u5C42_u5B9A_u4E49"><span class="nav-number">2.4.1.</span> <span class="nav-text">ReLU层定义</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Pooling_u5C42_u5B9A_u4E49"><span class="nav-number">2.5.</span> <span class="nav-text">Pooling层定义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#FullConnect_u5C42_u5B9A_u4E49"><span class="nav-number">2.6.</span> <span class="nav-text">FullConnect层定义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Dropout_u5C42_u5B9A_u4E49"><span class="nav-number">2.7.</span> <span class="nav-text">Dropout层定义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Loss_u5C42_u5B9A_u4E49"><span class="nav-number">2.8.</span> <span class="nav-text">Loss层定义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Accuracy_u5C42_u5B9A_u4E49"><span class="nav-number">2.9.</span> <span class="nav-text">Accuracy层定义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#u8F6C_u6362_u4E3Aproto_u6587_u672C"><span class="nav-number">2.10.</span> <span class="nav-text">转换为proto文本</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Solver_u5B9A_u4E49"><span class="nav-number">3.</span> <span class="nav-text">Solver定义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Model_u8BAD_u7EC3"><span class="nav-number">4.</span> <span class="nav-text">Model训练</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#u5206_u7C7B_u56FE_u7247"><span class="nav-number">5.</span> <span class="nav-text">分类图片</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#u52A0_u8F7DModel_u6570_u636E"><span class="nav-number">5.1.</span> <span class="nav-text">加载Model数据</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#u4E2D_u503C_u6587_u4EF6_u8F6C_u6362"><span class="nav-number">5.2.</span> <span class="nav-text">中值文件转换</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#u56FE_u7247_u9884_u5904_u7406"><span class="nav-number">5.3.</span> <span class="nav-text">图片预处理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#u6267_u884C_u6D4B_u8BD5"><span class="nav-number">5.4.</span> <span class="nav-text">执行测试</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#u5404_u5C42_u4FE1_u606F_u663E_u793A"><span class="nav-number">5.5.</span> <span class="nav-text">各层信息显示</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#u81EA_u5B9A_u4E49_u51FD_u6570_3A_u53C2_u6570/_u5377_u79EF_u7ED3_u679C_u53EF_u89C6_u5316"><span class="nav-number">5.6.</span> <span class="nav-text">自定义函数:参数/卷积结果可视化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#u81EA_u5B9A_u4E49_uFF1A_u8BAD_u7EC3_u8FC7_u7A0BLoss_26amp_3BAccuracy_u53EF_u89C6_u5316"><span class="nav-number">5.7.</span> <span class="nav-text">自定义：训练过程Loss&Accuracy可视化</span></a></li></ol></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Wentao MA</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"wentaoma"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    <script src="/vendors/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

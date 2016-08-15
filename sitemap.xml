@@ -2,9 +2,16 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://wentaoma.com/2016/08/10/caffe-python-common-api-reference/</loc>
+    
+    <lastmod>2016-08-15T03:55:32.033Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://wentaoma.com/2016/08/08/caffe-cifar10-model-visualization-with-python/</loc>
     
-    <lastmod>2016-08-08T08:16:17.137Z</lastmod>
+    <lastmod>2016-08-11T03:44:43.348Z</lastmod>
     
   </url>
   
