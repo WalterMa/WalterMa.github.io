@@ -90,7 +90,7 @@
 <meta property="og:url" content="http://wentaoma.com/2016/08/19/CSS-selector-weight/index.html">
 <meta property="og:site_name" content="Wentao">
 <meta property="og:description" content="CSS样式应用到元素上的规则可以简述为：先将所有样式按来源、权重排序；然后取权重高的样式，权重相同的样式根据“就近原则”应用。我们先从选择器权重说起：">
-<meta property="og:updated_time" content="2016-08-19T08:17:04.051Z">
+<meta property="og:updated_time" content="2016-08-20T05:32:38.856Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="CSS选择器权重及样式优先级">
 <meta name="twitter:description" content="CSS样式应用到元素上的规则可以简述为：先将所有样式按来源、权重排序；然后取权重高的样式，权重相同的样式根据“就近原则”应用。我们先从选择器权重说起：">
@@ -329,10 +329,11 @@
 <figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">h1</span> <span class="rules">&#123;<span class="rule"><span class="attribute">color</span>:<span class="value">red <span class="important">!important</span></span></span>;&#125;</span></span><br><span class="line"><span class="id">#title</span> <span class="rules">&#123;<span class="rule"><span class="attribute">color</span>:<span class="value">yellow <span class="important">!important</span></span></span>;&#125;</span></span><br></pre></td></tr></table></figure>
 <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="title">h1</span> <span class="attribute">id</span>=<span class="value">"title"</span> <span class="attribute">style</span>=<span class="value">"color:black"</span>&gt;</span>Final Color is YELLOW<span class="tag">&lt;/<span class="title">h1</span>&gt;</span></span><br></pre></td></tr></table></figure>
 <p>两个重要声明，第二个<code>#title</code>权重更高，且都优先于内联非重要声明的样式。</p>
-<p><strong>4. 继承的样式没有权重，会被通配符样式(0权重)覆盖，如：</strong></p>
+<p><strong>4. (默认)继承的样式没有权重，会被通配符样式(0权重)覆盖，如：</strong></p>
 <figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">* <span class="rules">&#123;<span class="rule"><span class="attribute">color</span>:<span class="value">yellow</span></span>;&#125;</span></span><br><span class="line"><span class="tag">h1</span> <span class="rules">&#123;<span class="rule"><span class="attribute">color</span>:<span class="value">red</span></span>;&#125;</span></span><br></pre></td></tr></table></figure>
 <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="title">h1</span>&gt;</span>RED and <span class="tag">&lt;<span class="title">em</span>&gt;</span>YELLOW<span class="tag">&lt;/<span class="title">em</span>&gt;</span><span class="tag">&lt;/<span class="title">h1</span>&gt;</span></span><br></pre></td></tr></table></figure>
 <p><code>em</code>元素继承了<code>h1</code>的color样式，但是因为其无权重，所以会被<code>* {color:yellow;}</code>覆盖。<br>所以通配符选择器往往有一种短路继承的效果。</p>
+<p>但是如果在样式中明确指定使用继承属性值，就要看选择器的权重来决定了。比如在上述CSS中加入<code>em{color:inherit;}</code><br><code>em</code>标签文本就显示为继承下来的红色。</p>
 <h2 id="CSS_u6837_u5F0F_u5E94_u7528_u4F18_u5148_u7EA7_u5206_u6790"><a href="#CSS_u6837_u5F0F_u5E94_u7528_u4F18_u5148_u7EA7_u5206_u6790" class="headerlink" title="CSS样式应用优先级分析"></a>CSS样式应用优先级分析</h2><p>了解了选择器权重之后，我们就可以来看一下CSS到底是怎么选择某个元素样式的：</p>
 <ol>
 <li><p><strong>列出每一条样式规则，每条规则都含有一个匹配给定元素的选择器</strong></p>
