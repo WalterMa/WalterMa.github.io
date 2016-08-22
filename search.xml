@@ -27,6 +27,7 @@
 <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="title">h1</span>&gt;</span>RED and <span class="tag">&lt;<span class="title">em</span>&gt;</span>YELLOW<span class="tag">&lt;/<span class="title">em</span>&gt;</span><span class="tag">&lt;/<span class="title">h1</span>&gt;</span></span><br></pre></td></tr></table></figure>
 <p><code>em</code>元素继承了<code>h1</code>的color样式，但是因为其无权重，所以会被<code>* {color:yellow;}</code>覆盖。<br>所以通配符选择器往往有一种短路继承的效果。</p>
 <p>但是如果在样式中明确指定使用继承属性值，就要看选择器的权重来决定了。比如在上述CSS中加入<code>em{color:inherit;}</code><br><code>em</code>标签文本就显示为继承下来的红色。</p>
+<iframe width="100%" height="300" src="http://jsfiddle.net/vcdvuv5p/embedded/css,html,result/light" frameborder="0" allowfullscreen></iframe>
 <h2 id="CSS_u6837_u5F0F_u5E94_u7528_u4F18_u5148_u7EA7_u5206_u6790"><a href="#CSS_u6837_u5F0F_u5E94_u7528_u4F18_u5148_u7EA7_u5206_u6790" class="headerlink" title="CSS样式应用优先级分析"></a>CSS样式应用优先级分析</h2><p>了解了选择器权重之后，我们就可以来看一下CSS到底是怎么选择某个元素样式的：</p>
 <ol>
 <li><p><strong>列出每一条样式规则，每条规则都含有一个匹配给定元素的选择器</strong></p>
