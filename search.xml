@@ -4,6 +4,40 @@
   
     
     <entry>
+      <title><![CDATA[cmder中文显示相关问题解决方案(1.3以上版本)]]></title>
+      <url>http://wentaoma.com/2016/08/31/cmder-chinese-encode/</url>
+      <content type="html"><![CDATA[<p>cmder虽然Windows命令行的进阶版，虽然好看易用，但其中文编码一直是个问题。网上有不少博客给出解决方案，大部分都已因为版本更新失效。<br>本文解决方案针对1.3以上版本的cmder用户<br><a id="more"></a></p>
+<h2 id="u4E2D_u6587_u5B57_u4F53_u91CD_u53E0_u95EE_u9898"><a href="#u4E2D_u6587_u5B57_u4F53_u91CD_u53E0_u95EE_u9898" class="headerlink" title="中文字体重叠问题"></a>中文字体重叠问题</h2><h3 id="u9519_u8BEF_u65B9_u6848_uFF1A"><a href="#u9519_u8BEF_u65B9_u6848_uFF1A" class="headerlink" title="错误方案："></a>错误方案：</h3><blockquote>
+<p>需要取消勾选设置中的<code>Monospace</code>选项</p>
+</blockquote>
+<h3 id="u6B63_u786E_u65B9_u6848_3A"><a href="#u6B63_u786E_u65B9_u6848_3A" class="headerlink" title="正确方案:"></a>正确方案:</h3><p>这个问题在<code>cmder v1.3.0</code>以上版本中已经修复，不需要进行任何操作</p>
+<h2 id="ls_u547D_u4EE4_u4E2D_u6587_u8DEF_u5F84/_u6587_u4EF6_u540D_u4E71_u7801"><a href="#ls_u547D_u4EE4_u4E2D_u6587_u8DEF_u5F84/_u6587_u4EF6_u540D_u4E71_u7801" class="headerlink" title="ls命令中文路径/文件名乱码"></a><code>ls</code>命令中文路径/文件名乱码</h2><h3 id="u9519_u8BEF_u65B9_u6848_uFF1A-1"><a href="#u9519_u8BEF_u65B9_u6848_uFF1A-1" class="headerlink" title="错误方案："></a>错误方案：</h3><blockquote>
+<p>添加4行命令到cmder/config/aliases文件末尾…</p>
+</blockquote>
+<p>在<code>cmder v1.3.0</code>以上版本初始创建的<code>cmder/config/user-aliases.cmd</code>文件中已经包含：</p>
+<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ls=ls --show-control-chars -F --<span class="built_in">color</span> $*</span><br></pre></td></tr></table></figure>
+<p>不需要添加其它命令（实际上添加了也没有效果）</p>
+<h3 id="u6B63_u786E_u65B9_u6848_3A-1"><a href="#u6B63_u786E_u65B9_u6848_3A-1" class="headerlink" title="正确方案:"></a>正确方案:</h3><ol>
+<li><p><code>win+ctrl+p</code>打开Settings</p>
+</li>
+<li><p>在Settings &gt; Startup &gt; Environment里添加：<code>set LANG=zh_CN.UTF8</code></p>
+</li>
+</ol>
+<p><strong>PS：</strong></p>
+<p>这样修改过<code>ls</code>可以正确显示中文，但<code>ls |more</code>还是会出现乱码。<br>如果改为<code>set LANG=zh_CN.GBK</code>可以解决这个问题。</p>
+<p><strong>PPS：</strong></p>
+<p>因为<code>cat</code>命令读取文件的编码与此有关，如果改为GBK则<code>cat</code>一个UTF8文件会显示乱码，<br>如果改为UTF8则<code>cat</code>一个GBK文件会显示乱码，<br>具体设置还是看你环境中常用编码。</p>
+<h2 id="cd_u8FDB_u4E00_u4E2A_u4E2D_u6587_u76EE_u5F55_uFF0C_u4E2D_u6587_u8DEF_u5F84_u540D_u663E_u793A_u4E71_u7801"><a href="#cd_u8FDB_u4E00_u4E2A_u4E2D_u6587_u76EE_u5F55_uFF0C_u4E2D_u6587_u8DEF_u5F84_u540D_u663E_u793A_u4E71_u7801" class="headerlink" title="cd进一个中文目录，中文路径名显示乱码"></a><code>cd</code>进一个中文目录，中文路径名显示乱码</h2><p>经过上述设置，cmder一般情况下都能正常显示中文</p>
+<p>但是如果你进入一个中文路径的话，cmder的路径的中文仍然是乱码<br>好在已经有人解决了这个问题</p>
+<p><a href="https://github.com/cmderdev/cmder/pull/1070" target="_blank" rel="external">Parse the original prompt for cwd and env names by janschulz · Pull Request #1070 · cmderdev/cmder · GitHub</a></p>
+<h3 id="u89E3_u51B3_u65B9_u6848"><a href="#u89E3_u51B3_u65B9_u6848" class="headerlink" title="解决方案"></a>解决方案</h3><p>只需下载最新的Release（目前是1.3.1）：<br><a href="https://github.com/cmderdev/cmder/releases" target="_blank" rel="external">Releases · cmderdev/cmder · GitHub</a></p>
+<p>然后解压覆盖就好</p>
+<p>最后附上一张配置完成的示意图:</p>
+<img src="/2016/08/31/cmder-chinese-encode/cmder-cn-encode.png" alt="cmder-cn-encode.png" title="">
+]]></content>
+    </entry>
+    
+    <entry>
       <title><![CDATA[CSS选择器权重及样式优先级]]></title>
       <url>http://wentaoma.com/2016/08/19/CSS-selector-weight/</url>
       <content type="html"><![CDATA[<p>CSS样式应用到元素上的规则可以简述为：先将所有样式按来源、权重排序；然后取权重高的样式，权重相同的样式根据“就近原则”应用。<br>我们先从选择器权重说起：<br><a id="more"></a></p>
