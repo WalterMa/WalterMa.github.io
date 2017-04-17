@@ -4,6 +4,49 @@
   
     
     <entry>
+      <title><![CDATA[ImageNet Classification with Deep ConvolutionalNeural Networks - 论文笔记]]></title>
+      <url>http://wentaoma.com/2017/04/17/paper-notes-alexnet/</url>
+      <content type="html"><![CDATA[<p>原文地址:<a href="https://papers.nips.cc/paper/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf" target="_blank" rel="external">ImageNet Classification with Deep ConvolutionalNeural Networks</a></p>
+<p>AlexNet是2012年ILSVRC的冠军, Top1和Top5的Error Rate分别为: 37.5%, 17.0%.<br><a id="more"></a></p>
+<h1 id="1-__u7B80_u4ECB"><a href="#1-__u7B80_u4ECB" class="headerlink" title="1. 简介"></a>1. 简介</h1><p>在此论文发表时， 基于已标记的小型图片数据集(如：NORB, Caltech-101/256, and CIFAR-10/100)的简单物体识别工作已经取得了相当优异的结果。例如MNIST数字识别的当前(即论文发表时间:2012)最优异的Error Rate(&lt;0.3%)已经超越了人类的水平。<br>然而真实情况下的物体识别要更复杂，同时也需要更大的数据集。但是这种大量的已标注的数据集直到最近才有收集到的可能，包括LabelMe和ImageNet等。</p>
+<p>为了从大量图片数据中学习，需要一个具有巨大Learning Capacity的模型。同时因为物体识别的复杂性，其问题即使诸如ImageNet这种量级的数据集也不可能完全指定，因此选用的模型也必须有较好的泛化能力。卷积神经网络(CNN)则是满足这些要求的一种模型。CNN的Capacity可以由它的的深度和广度来控制，同时对于自然图像其也能给出强且几乎正确的预测。另外相对于拥有近似层数的标准前馈神经网络，CNN由于更少的连接数和参数个数因而更容易训练同时只会略微降低理论最佳表现。</p>
+<p>尽管CNN有如此之多的好处，但将其大规模用于高分辨率图像上仍然花费巨大。幸运的是，如今(2012)的GPU对2D卷积计算进行了大量优化，已经足够训练大型CNN，而且最近(2012)诸如ImageNet的数据集也包含了足够多的已标记数据可以训练如此规模的模型同时又不会引起严重的过拟合。</p>
+<h1 id="2-__u6570_u636E_u96C6"><a href="#2-__u6570_u636E_u96C6" class="headerlink" title="2. 数据集"></a>2. 数据集</h1><p>ImageNet的图像分辨率并不固定，而AlexNet需要一个固定维数的输入。因此，作者将图片降采样到固定分256x256的分辨率上。<br>对于一个给定图像，首先将最短边(保持比例)拉伸到256个像素长度，再从拉伸后图像裁剪出中间的一个256x256像素的区块。然后除了在整个训练集图像上计算出的每个像素均值以外，对图像不再做其他操作。总的来说作者基于中心化的原始RGB像素值训练网络。</p>
+<h1 id="3-__u7F51_u7EDC_u7ED3_u6784"><a href="#3-__u7F51_u7EDC_u7ED3_u6784" class="headerlink" title="3. 网络结构"></a>3. 网络结构</h1><p>ALexNet共有8个层：5个卷积层和3个全连接层。<br>以下将按照论文作者对于其重要性的评估先后描述一些AlexNet中新的或原先不常用的特性：</p>
+<h2 id="3-1_ReLU_u975E_u7EBF_u6027_u6FC0_u6D3B_u51FD_u6570"><a href="#3-1_ReLU_u975E_u7EBF_u6027_u6FC0_u6D3B_u51FD_u6570" class="headerlink" title="3.1 ReLU非线性激活函数"></a>3.1 ReLU非线性激活函数</h2><p>原先常用的饱和非线性激活函数 f(x) = tanh(x) 或 f(x) = 1/(1 + e^-x)在使用梯度下降法训练时远远慢于使用不饱和非线性激活函数 f(x) = max(0, x) 称之为Rectified Linear Unit（ReLU）.</p>
+
+<p>对一个在CIFAR-10上训练的四层卷积神经网络，ReLU达到25%错误率的时间比tanh快了6倍。</p>
+<h2 id="3-2__u591AGPU_u8BAD_u7EC3"><a href="#3-2__u591AGPU_u8BAD_u7EC3" class="headerlink" title="3.2 多GPU训练"></a>3.2 多GPU训练</h2><p>单张GTX 580只有3GB显存，这限制了可在其上训练的网络最大大小。 因此我们将网络分在两张GPU上。</p>
+<p>这里还有一个额外的技巧：GPU之间只在特定的层通信。例如第三层卷积核使用第二层的所有输出做输入，而第四层的则只使用同一GPU上第三层的输出做输入。</p>
+<h2 id="3-3__u5C40_u90E8_u54CD_u5E94_u5F52_u4E00_u5316_uFF08Local_Response_Normalization_uFF0C_LRN_uFF09"><a href="#3-3__u5C40_u90E8_u54CD_u5E94_u5F52_u4E00_u5316_uFF08Local_Response_Normalization_uFF0C_LRN_uFF09" class="headerlink" title="3.3 局部响应归一化（Local Response Normalization， LRN）"></a>3.3 局部响应归一化（Local Response Normalization， LRN）</h2><p>先看方程式：<br><img src="/2017/04/17/paper-notes-alexnet/lrn-func.jpg" alt="lrn-func.jpg" title=""></p>
+<p>这个方程式对空间位置相同的n个相邻卷积核(已经过ReLU变换的)输出做Normalization操作，N则是这一层卷积核数量。<br>常量k, n, α, β是超参数。这种操作启发于真实神经元的侧抑制机制(lateral inhibition)。</p>
+<p>更为具体的操作过程如下图所示：<br><img src="/2017/04/17/paper-notes-alexnet/lrn.jpg" alt="lrn.jpg" title=""></p>
+<p>不过根据<a href="http://cs231n.github.io/convolutional-networks/#normalization-layer" target="_blank" rel="external">CS231n</a>的描述：这些归一化层已经不太常用，应为在实践中它们的作用较小。</p>
+<h2 id="3-4__u91CD_u53E0_u6C60_u5316_uFF08Overlapping_Pooling_uFF09"><a href="#3-4__u91CD_u53E0_u6C60_u5316_uFF08Overlapping_Pooling_uFF09" class="headerlink" title="3.4 重叠池化（Overlapping Pooling）"></a>3.4 重叠池化（Overlapping Pooling）</h2><p>传统的Pooling层是不重叠的，而本论文提出使Pooling层重叠可以降低错误率（此处理使Top 1/5错误率下降了0.4/0.3%），而且对防止过拟合有一定(slightly)的效果。</p>
+<h2 id="3-5__u6574_u4F53_u7ED3_u6784"><a href="#3-5__u6574_u4F53_u7ED3_u6784" class="headerlink" title="3.5 整体结构"></a>3.5 整体结构</h2><img src="/2017/04/17/paper-notes-alexnet/alexnet-arch.jpg" alt="alexnet-arch.jpg" title="">
+<p>其中第一层输入应该为作者笔误，实际应该为227x227x3的输入大小，有96个11x11x3步长为4的卷积核（每个GPU有48个），第二层接受（响应归一化和池化后的）底层的输出，第3、4、5层间则没有Normalization和Pooling层。最后每个全连接层有4096个神经元。</p>
+<h1 id="4__u964D_u4F4E_u8FC7_u62DF_u5408"><a href="#4__u964D_u4F4E_u8FC7_u62DF_u5408" class="headerlink" title="4 降低过拟合"></a>4 降低过拟合</h1><p>AlexNet模型共有6000万个参数，现有数据不足以学习这么多参数而不引起过拟合，作者主要采用两种方法来对抗过拟合：</p>
+<h2 id="4-1__u6570_u636E_u6269_u589E_uFF08Data_Augmentation_uFF09"><a href="#4-1__u6570_u636E_u6269_u589E_uFF08Data_Augmentation_uFF09" class="headerlink" title="4.1 数据扩增（Data Augmentation）"></a>4.1 数据扩增（Data Augmentation）</h2><p>最简单和常见的减少过拟合的方法就是对图像数据做标签不变变换(label-preserving transformations)来人为增大数据集。<br>在作者实现中，在CPU上使用Python代码生成变换后的图像（而不存储在硬盘上）同时GPU根据前一个batch的数据在做训练。</p>
+<p>第一种方法是图像裁剪和水平翻转。从256x256中裁出随机位置的224x224像素（应为227x227）并加上水平翻转。在测试时使用4角+中心+翻转的10张图预测值取平均。</p>
+<p>第二种方法是加调整图像RGB通道强度。对整个训练集求来RGB值的PCA，然后不降维但对特征向量乘上一个均值0标准差0.1的高斯随机变量。此处理使top 1错误率下降了1%。</p>
+<h2 id="4-2_Dropout"><a href="#4-2_Dropout" class="headerlink" title="4.2 Dropout"></a>4.2 Dropout</h2><p>整合多个模型的预测结果对于减少错误率有显著效果，但这样对于花费数天来训练的神经网络来说花费巨大。但是一种更加高效的方法就是使用dropout。</p>
+<p>把神经元的输出以0.5的概率置零，相当于扔掉了(dropped out)，被扔掉的神经元在前馈和反馈中都不起作用。所以每当有一个新输入时，由于Dropout的随机性，相当于在训练一个新的网络，但是这些网络都共享参数。<br>这种策略减少了神经元之间的相互影响，强制网络学习出更鲁棒的features能整合多个随机神经元的输出而不依赖某一个特别的神经元。<br>测试的时候则不dropout了，但每个神经元输出值乘以0.5，作为引入了dropout后预测分布的均值的估计。</p>
+<p>作者在前两个全连接层使用了dropout，同时dropout几乎倍增了网络收敛时间。</p>
+<h1 id="5__u5177_u4F53_u8BAD_u7EC3_u8FC7_u7A0B"><a href="#5__u5177_u4F53_u8BAD_u7EC3_u8FC7_u7A0B" class="headerlink" title="5 具体训练过程"></a>5 具体训练过程</h1><p>使用Mini-batch stochastic gradient descent，batch_size=128, momentum=0.9, weight_decay=0.0005。</p>
+<p>权重更新规则如下：<br><img src="/2017/04/17/paper-notes-alexnet/weight.jpg" alt="weight.jpg" title=""></p>
+<p>其中i是迭代次数，v是动量变量(momentum variable), ε是学习率，学习率后面的则是整个batch对于w的平均梯度。</p>
+<p>作者使用均值0标准差为0.01的高斯分布初始化权重，对于2、4、5和全连接层的bias初始值1（给ReLU单元提供正的输入加速早期学习），其他层bias初始值为0。</p>
+<p>同时其在每一层使用相同学习率并在训练过程中手动调整：每当验证集错误率不再下降时就对学习率除以10.学习率初始值为0.1，并且最后训练完成时下降了3次。整个网络大概在120万张图片训练集上跑了90遍，使用两块GTX580 3G花了5到6天。</p>
+<h1 id="6__u7ED3_u8BBA"><a href="#6__u7ED3_u8BBA" class="headerlink" title="6 结论"></a>6 结论</h1><ol>
+<li><p>对最终正确率最关键的因素：网络深度（减一层2%、加一层1.7%）&gt; 单层容量（双GPU约1.7%）&gt; LRN（1.4%）&gt; PCA干扰（1%）&gt; 重叠Polling（0.4%）。即，虽然其他的Trick也有明显效果，但决定性的，还是尽可能保持一个足够深、足够大规模的网络。</p>
+</li>
+<li><p>文中除了常规的case展示，还把倒数第二层的欧氏距离用于衡量图片是否相似，展示了很多图片查询的例子。</p>
+</li>
+</ol>
+]]></content>
+    </entry>
+    
+    <entry>
       <title><![CDATA[cmder中文显示相关问题解决方案(1.3以上版本)]]></title>
       <url>http://wentaoma.com/2016/08/31/cmder-chinese-encode/</url>
       <content type="html"><![CDATA[<p>cmder虽然Windows命令行的进阶版，虽然好看易用，但其中文编码一直是个问题。网上有不少博客给出解决方案，大部分都已因为版本更新失效。<br>本文解决方案针对1.3以上版本的cmder用户<br><a id="more"></a></p>
