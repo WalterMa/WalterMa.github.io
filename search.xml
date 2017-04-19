@@ -4,15 +4,50 @@
   
     
     <entry>
+      <title><![CDATA[Very deep convolutional networks for large-scale image recognition - 论文笔记]]></title>
+      <url>http://wentaoma.com/2017/04/18/paper-notes-vggnet/</url>
+      <content type="html"><![CDATA[<p>原文地址:<a href="https://arxiv.org/abs/1409.1556" target="_blank" rel="external">Very deep convolutional networks for large-scale image recognition</a><br>VggNet在ILSVRC-2014上分别获得定位和分类项目中第一名和第二名的成绩，其主要采用3x3的小卷积并将模型深度增加到16-19层。<br><a id="more"></a></p>
+<h1 id="1__u4ECB_u7ECD"><a href="#1__u4ECB_u7ECD" class="headerlink" title="1 介绍"></a>1 介绍</h1><p>卷积网络(ConvNets)最近(2014)在大规模的图像和视频识别中获得了很大的成功，这可能由于大型公共图像库（如 ImageNet）以及高性能计算系统（如GPU或大规模分布式集群）。特别是在深度视觉识别结构发展中扮演了重要角色的ImageNet大规模视觉识别大赛(ImageNet Large-ScaleVisual Recognition Challenge, ILSVRC)为从高维浅层特征编码 (ILSVRC-2011冠军)到深度卷积网络(ILSVRC-2012冠军)的几代大规模图像分类系统提供了测试平台。</p>
+<p>随着卷积网络在计算机视觉领域的应用越来越广泛，为了获得更高的准确率，越来越多的人尝试在<a href="https://papers.nips.cc/paper/4824-imagenet-classification-with-deep-convolutional-neural-networks" target="_blank" rel="external">Krizhevsky et al. (2012)</a>中的原始框架上进行改进。例如，ILSVRC-2013最好的参赛模型在第一个卷积层上使用了较小的接受域窗口(smaller receptive window size)以及较小的滑动步长。另一种改进方案是在整张图像及其多个尺度上稠密的训练和测试网络。本文中，我们关注了卷积网络结构设计中的另一个重要因素——深度。为此，我们固定了网络框架的其他参数，然后逐步通过增加更多的卷积层来增加网络的深度。由于我们在所有层都是用非常小(3×3)的卷积滤波器，因此这是可行的方法。</p>
+<h1 id="2__u5377_u79EF_u7F51_u7EDC_u8BBE_u7F6E"><a href="#2__u5377_u79EF_u7F51_u7EDC_u8BBE_u7F6E" class="headerlink" title="2 卷积网络设置"></a>2 卷积网络设置</h1><p>作者为了在公平的环境下衡量由增加的卷积层深度所带来的效果，所有的卷积层都用相同的原则来设计。</p>
+<h2 id="2-1__u7ED3_u6784"><a href="#2-1__u7ED3_u6784" class="headerlink" title="2.1 结构"></a>2.1 结构</h2><p>在训练阶段，采用224x224的固定大小RGB图像做输入，唯一的预处理操作就是计算出整个训练集的每个像素RGB均值。（此处预处理和ALexNet相同）。</p>
+<p>输入图像被送进使用3x3小卷积的卷积层栈中。在某一个网络设置中，作者也使用了1x1的卷积核，1x1的卷积核可以看作是对输入通道做了一个线性变换(之后接一个非线性操作)。所有卷积都使用1像素步长，同时对输入做相应的padding操作以保持经过卷积后的输出图像空间分辨率(图像长/宽)不变，比如对于3x3的卷积层就要在图像四周做1像素的padding。空间池化包含5个最大池化层，这些池化层在某一些卷积层后(而不是所有)。最大池化采用步长为2的2x2大小窗口。</p>
+<p>卷积层栈之后有3个全连接(FC)层：前两层各有4096个通道，第三层用于做1000类的ILSVRC分类因而有1000个通道。最后一层是softmax层。全连接层的设置在作者的所有网络中都相同。</p>
+<p>所有的隐藏层都进行ReLU操作。同时我们所有网络中只有一个使用了LRN（LRN参数和ALexNet中相同），因为作者发现LRN并不会提高在ILSVRC上的准确度但会增加内存消耗和计算时间。</p>
+<h2 id="2-2__u914D_u7F6E"><a href="#2-2__u914D_u7F6E" class="headerlink" title="2.2 配置"></a>2.2 配置</h2><p>这篇文章所评估的卷积网络配置如下：<br><img src="/2017/04/18/paper-notes-vggnet/nets.png" alt="nets.png" title=""><br>所有的网络都采用2.1中描述的设计，它们之间只有深度上的差异。卷积层的通道数从64开始每次经过最大池化层后x2直到512.</p>
+<p>各网络的参数数量如下：<br><img src="/2017/04/18/paper-notes-vggnet/params.png" alt="params.png" title=""><br>尽管网络很深，但是权重的数量并不比一个网络更浅但是卷积核尺寸更大的模型多。</p>
+<h2 id="2-3__u8BA8_u8BBA"><a href="#2-3__u8BA8_u8BBA" class="headerlink" title="2.3 讨论"></a>2.3 讨论</h2><p>VGG使用了更小的(3x3，步长为1)的卷积核，不同于前两年的ILSVRC的优胜者(2012-AlexNet: 11x11步长4, <a href="https://arxiv.org/abs/1311.2901" target="_blank" rel="external">2013; 2013-ZFNet</a>: 7x7步长2)。显然，两个连续3x3卷积相当于一个5x5的卷积，而三个3x3的卷积则相当于7x7的卷积.</p>
+<p>使用3x3小卷积的好处有两个，以用3个3x3卷积替代一个7x7卷积为例：</p>
+<ol>
+<li>3个卷积层就可以做3次ReLU等非线性操作而不是1次，这使模型Capacity增加了。</li>
+<li>多个小卷积叠加带来的是更少的参数量，如果每个卷积层输入输出都有C个通道，则3个3x3卷积层权重数为3(3^2<em>C^2)=27</em>C^2,而单一的7x7卷积层权重数为7<em>7</em>C^2=49*C^2</li>
+</ol>
+<p>另外作者还考虑到了1×1的卷积，尽管(输出和输出的通道数量相同的)1x1卷积层本质上相当于到相同维度空间的一个线性投影，但是激活函数使整个模型非线性增加。1×1卷积层最近(2014)被使用在的<a href="https://arxiv.org/abs/1312.4400" target="_blank" rel="external">Network in Network</a>结构中。</p>
+<p>小尺寸的卷积滤之前在<a href="https://www.researchgate.net/publication/220812758_Flexible_High_Performance_Convolutional_Neural_Networks_for_Image_Classification" target="_blank" rel="external">Flexible, High Performance Convolutional Neural Networks for Image Classification(2011)</a>中使用过，但是他们的网络远没有VGGNet的深。</p>
+<h1 id="3__u5206_u7C7B_u6846_u67B6"><a href="#3__u5206_u7C7B_u6846_u67B6" class="headerlink" title="3 分类框架"></a>3 分类框架</h1><h2 id="3-1__u8BAD_u7EC3"><a href="#3-1__u8BAD_u7EC3" class="headerlink" title="3.1 训练"></a>3.1 训练</h2><p>VGGNet使用的训练方法基本延续AlexNet的方法（除了从多尺度图像中裁切，后文会有解释）：<br>使用带有动量(momentum=0.9)的mini-batch(batch_size=256)梯度下降法(基于反向传播, <a href="http://yann.lecun.org/exdb/publis/pdf/lecun-89e.pdf" target="_blank" rel="external">LeCun et al, 1989</a>)来优化多项式回归(the multinomial logistic regression)。通过权值衰减(L2惩罚系数设置为5*10^−4)以及对前两个全连接层执行dropout(dropout=0.5)来对训练进行正则化。初始学习率设置为10^−2，当验证集准确率稳定时将学习率除以10。学习率总共降低了3次，训练一共进行了370K次迭代(74个epoch)。相比AlexNet约90epochs有所减少，由于：1) 更深的深度和更小的卷积滤波器尺寸隐式的增强了正则化；2) 某些层执行了预初始化(pre-initialisation)。</p>
+<p>网络权重的初始化是非常重要的，由于深度网络梯度的不稳定性，不合适的初始化将会阻碍网络的学习。为了避免这个问题，我们先在网络A上使用随机初始化进行训练。然后在训练更深的网络时，我们使用网络A来初始化前四个卷积层和最后三个全连接层(中间层使用随机初始化)。同时作者并没有降低预初始化层的学习率。采用随机初始化的层则从均值0方差0.01的正态分布中对权重进行采样，bias初始化为0。作者在文章提交后发现可以使用<a href="http://proceedings.mlr.press/v9/glorot10a.html" target="_blank" rel="external">Understanding the difficulty of training deep feedforward neural networks</a>中的随机初始化程序来对权重进初始化而不需要进行预训练。</p>
+<h3 id="u8BAD_u7EC3_u56FE_u50CF_u5927_u5C0F"><a href="#u8BAD_u7EC3_u56FE_u50CF_u5927_u5C0F" class="headerlink" title="训练图像大小"></a>训练图像大小</h3><p>作者在模型训练时，使用了Multi-scale的训练：把原始图像缩放到最小边S不小于224，然后在整幅图像上提取224*224片段来进行训练。两种方案：<br>方案1：所有图像上固定S，分别设置S=256，和S=384，然后进行裁切来训练两个模型，使用两种模型来评估。<br>方案2：对于每一幅图像，在[Smin,Smax]中随机选取一个S，然后在进行裁切来训练模型，这种训练方式相当于使用了尺寸抖动（scale jittering）的数据增强，可以使用一个单一的模型来对多尺寸图像进行识别。</p>
+<h2 id="3-2__u6D4B_u8BD5"><a href="#3-2__u6D4B_u8BD5" class="headerlink" title="3.2 测试"></a>3.2 测试</h2><p>测试阶段，图像缩放到一个尺寸Q（Q与训练尺寸S并不一定要相同）。然后根据<a href="https://arxiv.org/abs/1312.6229" target="_blank" rel="external">OverFeat</a>中方法，将网络转换为全卷积网络(FCN):第一个全连接层转换成7×7的卷积层，后两个全连接层转换成1×1的卷积层。再将此网络上计算缩放后但未经裁切的图片的分类得分，计算原始图像和翻转图像上得分平均值作为最终得分。[这部分可以参考: <a href="http://www.jianshu.com/p/6d441e208547" target="_blank" rel="external">http://www.jianshu.com/p/6d441e208547</a>]</p>
+<p>作者还发现在测试时使用多种尺寸缩放图像并进行裁剪再结合上述方法可以进一步提高准确率，并给出了实验结果(4.3)。</p>
+<h2 id="3-3__u5B9E_u73B0_u7EC6_u8282"><a href="#3-3__u5B9E_u73B0_u7EC6_u8282" class="headerlink" title="3.3 实现细节"></a>3.3 实现细节</h2><p>VGGNet基于Caffe实现但对其进行了修改，以满足多GPU训练和评估的需要。</p>
+<p>训练时，将每批数据分给多个GPU并行计算，最后计算所有GPU的梯度平均值作为最后此批数据总梯度。因为梯度计算在GPU间同步所以多GPU训练和单GPU训练结果相同。</p>
+<p>训练时间：4块NVIDIA Titan Black(是单卡的3.75倍)训练2-3周</p>
+<h1 id="4__u5206_u7C7B_u5B9E_u9A8C"><a href="#4__u5206_u7C7B_u5B9E_u9A8C" class="headerlink" title="4 分类实验"></a>4 分类实验</h1><h2 id="4-1__u5355_u4E00_u5C3A_u5BF8_28SINGLE_SCALE_EVALUATION_29"><a href="#4-1__u5355_u4E00_u5C3A_u5BF8_28SINGLE_SCALE_EVALUATION_29" class="headerlink" title="4.1 单一尺寸(SINGLE SCALE EVALUATION)"></a>4.1 单一尺寸(SINGLE SCALE EVALUATION)</h2><img src="/2017/04/18/paper-notes-vggnet/single-scale.png" alt="single-scale.png" title="">
+<h2 id="4-2__u591A_u5C3A_u5BF8_28MULTI-SCALE_EVALUATION_29"><a href="#4-2__u591A_u5C3A_u5BF8_28MULTI-SCALE_EVALUATION_29" class="headerlink" title="4.2 多尺寸(MULTI-SCALE EVALUATION)"></a>4.2 多尺寸(MULTI-SCALE EVALUATION)</h2><img src="/2017/04/18/paper-notes-vggnet/multi-scale.png" alt="multi-scale.png" title="">
+<h2 id="4-3__u591A_u5C3A_u5BF8+_u88C1_u526A_28MULTI-CROP_EVALUATION_29"><a href="#4-3__u591A_u5C3A_u5BF8+_u88C1_u526A_28MULTI-CROP_EVALUATION_29" class="headerlink" title="4.3 多尺寸+裁剪(MULTI-CROP EVALUATION)"></a>4.3 多尺寸+裁剪(MULTI-CROP EVALUATION)</h2><img src="/2017/04/18/paper-notes-vggnet/multi-crop.png" alt="multi-crop.png" title="">
+<h2 id="4-4__u591A_u5377_u79EF_u7F51_u7EDC_u878D_u5408"><a href="#4-4__u591A_u5377_u79EF_u7F51_u7EDC_u878D_u5408" class="headerlink" title="4.4 多卷积网络融合"></a>4.4 多卷积网络融合</h2><img src="/2017/04/18/paper-notes-vggnet/net-fusion.png" alt="net-fusion.png" title="">
+]]></content>
+    </entry>
+    
+    <entry>
       <title><![CDATA[ImageNet Classification with Deep ConvolutionalNeural Networks - 论文笔记]]></title>
       <url>http://wentaoma.com/2017/04/17/paper-notes-alexnet/</url>
-      <content type="html"><![CDATA[<p>原文地址:<a href="https://papers.nips.cc/paper/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf" target="_blank" rel="external">ImageNet Classification with Deep ConvolutionalNeural Networks</a></p>
-<p>AlexNet是2012年ILSVRC的冠军, Top1和Top5的Error Rate分别为: 37.5%, 17.0%.<br><a id="more"></a></p>
-<h1 id="1-__u7B80_u4ECB"><a href="#1-__u7B80_u4ECB" class="headerlink" title="1. 简介"></a>1. 简介</h1><p>在此论文发表时， 基于已标记的小型图片数据集(如：NORB, Caltech-101/256, and CIFAR-10/100)的简单物体识别工作已经取得了相当优异的结果。例如MNIST数字识别的当前(即论文发表时间:2012)最优异的Error Rate(&lt;0.3%)已经超越了人类的水平。<br>然而真实情况下的物体识别要更复杂，同时也需要更大的数据集。但是这种大量的已标注的数据集直到最近才有收集到的可能，包括LabelMe和ImageNet等。</p>
+      <content type="html"><![CDATA[<p>原文地址:<a href="https://papers.nips.cc/paper/4824-imagenet-classification-with-deep-convolutional-neural-networks" target="_blank" rel="external">ImageNet Classification with Deep ConvolutionalNeural Networks</a><br>AlexNet是2012年ILSVRC的冠军, Top1和Top5的Error Rate分别为: 37.5%, 17.0%.<br><a id="more"></a></p>
+<h1 id="1__u7B80_u4ECB"><a href="#1__u7B80_u4ECB" class="headerlink" title="1 简介"></a>1 简介</h1><p>在此论文发表时， 基于已标记的小型图片数据集(如：NORB, Caltech-101/256, and CIFAR-10/100)的简单物体识别工作已经取得了相当优异的结果。例如MNIST数字识别的当前(即论文发表时间:2012)最优异的Error Rate(&lt;0.3%)已经超越了人类的水平。<br>然而真实情况下的物体识别要更复杂，同时也需要更大的数据集。但是这种大量的已标注的数据集直到最近才有收集到的可能，包括LabelMe和ImageNet等。</p>
 <p>为了从大量图片数据中学习，需要一个具有巨大Learning Capacity的模型。同时因为物体识别的复杂性，其问题即使诸如ImageNet这种量级的数据集也不可能完全指定，因此选用的模型也必须有较好的泛化能力。卷积神经网络(CNN)则是满足这些要求的一种模型。CNN的Capacity可以由它的的深度和广度来控制，同时对于自然图像其也能给出强且几乎正确的预测。另外相对于拥有近似层数的标准前馈神经网络，CNN由于更少的连接数和参数个数因而更容易训练同时只会略微降低理论最佳表现。</p>
 <p>尽管CNN有如此之多的好处，但将其大规模用于高分辨率图像上仍然花费巨大。幸运的是，如今(2012)的GPU对2D卷积计算进行了大量优化，已经足够训练大型CNN，而且最近(2012)诸如ImageNet的数据集也包含了足够多的已标记数据可以训练如此规模的模型同时又不会引起严重的过拟合。</p>
-<h1 id="2-__u6570_u636E_u96C6"><a href="#2-__u6570_u636E_u96C6" class="headerlink" title="2. 数据集"></a>2. 数据集</h1><p>ImageNet的图像分辨率并不固定，而AlexNet需要一个固定维数的输入。因此，作者将图片降采样到固定分256x256的分辨率上。<br>对于一个给定图像，首先将最短边(保持比例)拉伸到256个像素长度，再从拉伸后图像裁剪出中间的一个256x256像素的区块。然后除了在整个训练集图像上计算出的每个像素均值以外，对图像不再做其他操作。总的来说作者基于中心化的原始RGB像素值训练网络。</p>
-<h1 id="3-__u7F51_u7EDC_u7ED3_u6784"><a href="#3-__u7F51_u7EDC_u7ED3_u6784" class="headerlink" title="3. 网络结构"></a>3. 网络结构</h1><p>ALexNet共有8个层：5个卷积层和3个全连接层。<br>以下将按照论文作者对于其重要性的评估先后描述一些AlexNet中新的或原先不常用的特性：</p>
+<h1 id="2__u6570_u636E_u96C6"><a href="#2__u6570_u636E_u96C6" class="headerlink" title="2 数据集"></a>2 数据集</h1><p>ImageNet的图像分辨率并不固定，而AlexNet需要一个固定维数的输入。因此，作者将图片降采样到固定分256x256的分辨率上。<br>对于一个给定图像，首先将最短边(保持比例)拉伸到256个像素长度，再从拉伸后图像裁剪出中间的一个256x256像素的区块。然后除了在整个训练集图像上计算出的每个像素均值以外，对图像不再做其他操作。总的来说作者基于中心化的原始RGB像素值训练网络。</p>
+<h1 id="3__u7F51_u7EDC_u7ED3_u6784"><a href="#3__u7F51_u7EDC_u7ED3_u6784" class="headerlink" title="3 网络结构"></a>3 网络结构</h1><p>ALexNet共有8个层：5个卷积层和3个全连接层。<br>以下将按照论文作者对于其重要性的评估先后描述一些AlexNet中新的或原先不常用的特性：</p>
 <h2 id="3-1_ReLU_u975E_u7EBF_u6027_u6FC0_u6D3B_u51FD_u6570"><a href="#3-1_ReLU_u975E_u7EBF_u6027_u6FC0_u6D3B_u51FD_u6570" class="headerlink" title="3.1 ReLU非线性激活函数"></a>3.1 ReLU非线性激活函数</h2><p>原先常用的饱和非线性激活函数 f(x) = tanh(x) 或 f(x) = 1/(1 + e^-x)在使用梯度下降法训练时远远慢于使用不饱和非线性激活函数 f(x) = max(0, x) 称之为Rectified Linear Unit（ReLU）.</p>
 
 <p>对一个在CIFAR-10上训练的四层卷积神经网络，ReLU达到25%错误率的时间比tanh快了6倍。</p>
@@ -24,10 +59,10 @@
 <p>不过根据<a href="http://cs231n.github.io/convolutional-networks/#normalization-layer" target="_blank" rel="external">CS231n</a>的描述：这些归一化层已经不太常用，应为在实践中它们的作用较小。</p>
 <h2 id="3-4__u91CD_u53E0_u6C60_u5316_uFF08Overlapping_Pooling_uFF09"><a href="#3-4__u91CD_u53E0_u6C60_u5316_uFF08Overlapping_Pooling_uFF09" class="headerlink" title="3.4 重叠池化（Overlapping Pooling）"></a>3.4 重叠池化（Overlapping Pooling）</h2><p>传统的Pooling层是不重叠的，而本论文提出使Pooling层重叠可以降低错误率（此处理使Top 1/5错误率下降了0.4/0.3%），而且对防止过拟合有一定(slightly)的效果。</p>
 <h2 id="3-5__u6574_u4F53_u7ED3_u6784"><a href="#3-5__u6574_u4F53_u7ED3_u6784" class="headerlink" title="3.5 整体结构"></a>3.5 整体结构</h2><img src="/2017/04/17/paper-notes-alexnet/alexnet-arch.jpg" alt="alexnet-arch.jpg" title="">
-<p>其中第一层输入应该为作者笔误，实际应该为227x227x3的输入大小，有96个11x11x3步长为4的卷积核（每个GPU有48个），第二层接受（响应归一化和池化后的）底层的输出，第3、4、5层间则没有Normalization和Pooling层。最后每个全连接层有4096个神经元。</p>
+<p>其中第一层输入大小采用227x227更为合适(这样就不用padding)，根据<a href="http://cs231n.github.io/convolutional-networks/#MathJax-Element-14-Frame" target="_blank" rel="external">CS231n</a>此处作者可能采用了3个像素的zero-padding，有96个11x11x3步长为4的卷积核（每个GPU有48个），第二层接受（响应归一化和池化后的）底层的输出，第3、4、5层间则没有Normalization和Pooling层。最后每个全连接层有4096个神经元。</p>
 <h1 id="4__u964D_u4F4E_u8FC7_u62DF_u5408"><a href="#4__u964D_u4F4E_u8FC7_u62DF_u5408" class="headerlink" title="4 降低过拟合"></a>4 降低过拟合</h1><p>AlexNet模型共有6000万个参数，现有数据不足以学习这么多参数而不引起过拟合，作者主要采用两种方法来对抗过拟合：</p>
 <h2 id="4-1__u6570_u636E_u6269_u589E_uFF08Data_Augmentation_uFF09"><a href="#4-1__u6570_u636E_u6269_u589E_uFF08Data_Augmentation_uFF09" class="headerlink" title="4.1 数据扩增（Data Augmentation）"></a>4.1 数据扩增（Data Augmentation）</h2><p>最简单和常见的减少过拟合的方法就是对图像数据做标签不变变换(label-preserving transformations)来人为增大数据集。<br>在作者实现中，在CPU上使用Python代码生成变换后的图像（而不存储在硬盘上）同时GPU根据前一个batch的数据在做训练。</p>
-<p>第一种方法是图像裁剪和水平翻转。从256x256中裁出随机位置的224x224像素（应为227x227）并加上水平翻转。在测试时使用4角+中心+翻转的10张图预测值取平均。</p>
+<p>第一种方法是图像裁剪和水平翻转。从256x256中裁出随机位置的224x224像素并加上水平翻转。在测试时使用4角+中心+翻转的10张图预测值取平均。</p>
 <p>第二种方法是加调整图像RGB通道强度。对整个训练集求来RGB值的PCA，然后不降维但对特征向量乘上一个均值0标准差0.1的高斯随机变量。此处理使top 1错误率下降了1%。</p>
 <h2 id="4-2_Dropout"><a href="#4-2_Dropout" class="headerlink" title="4.2 Dropout"></a>4.2 Dropout</h2><p>整合多个模型的预测结果对于减少错误率有显著效果，但这样对于花费数天来训练的神经网络来说花费巨大。但是一种更加高效的方法就是使用dropout。</p>
 <p>把神经元的输出以0.5的概率置零，相当于扔掉了(dropped out)，被扔掉的神经元在前馈和反馈中都不起作用。所以每当有一个新输入时，由于Dropout的随机性，相当于在训练一个新的网络，但是这些网络都共享参数。<br>这种策略减少了神经元之间的相互影响，强制网络学习出更鲁棒的features能整合多个随机神经元的输出而不依赖某一个特别的神经元。<br>测试的时候则不dropout了，但每个神经元输出值乘以0.5，作为引入了dropout后预测分布的均值的估计。</p>
