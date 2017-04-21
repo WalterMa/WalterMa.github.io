@@ -4,6 +4,32 @@
   
     
     <entry>
+      <title><![CDATA[Going deeper with convolutions - 论文笔记]]></title>
+      <url>http://wentaoma.com/2017/04/20/paper-notes-inceptionv1/</url>
+      <content type="html"><![CDATA[<p>原文地址:<a href="https://arxiv.org/abs/1409.4842v1" target="_blank" rel="external">Going deeper with convolutions</a><br>GoogLeNet(Inception v1)通过重新设计网络结构在维持计算消耗不变同时增加了网络宽和深。<br><a id="more"></a></p>
+<h1 id="1__u5F15_u8A00"><a href="#1__u5F15_u8A00" class="headerlink" title="1 引言"></a>1 引言</h1><p>最近(2014)三年，主要由于深度学习和越来越实际的卷积网络的发展，图像识别以及物体检测的质量都在飞速提高。大多数进步并不只是更强大的硬件、更大的数据库和模型所带来的，而主要是一些新创意、新算法，以及优化的网络结构的成果。随着移动计算和嵌入式计算得到越来越广泛的认同，我们的算法的效率——尤其是其能量和存储利用率——变得越来越重要。值得注意的是，这篇文章中展现的深度结构在设计时就考虑了这些因素(大部分时候前馈模型计算量限制15亿次乘加运算左右)，而不仅是执着于单纯提高精度。</p>
+<h1 id="2__u76F8_u5173_u5DE5_u4F5C"><a href="#2__u76F8_u5173_u5DE5_u4F5C" class="headerlink" title="2 相关工作"></a>2 相关工作</h1><p>从LeNet-5开始，CNN通常就使用一种标准结构：一些堆叠的卷积层（后面通常跟随归一化和最大池化层）的后面接上一个或多个全连接层。采用这种基本设计的网络越来越流行并在MNIST、CIFAR尤其是ImageNet分类竞赛取得了最佳结果。 对于如ImageNet等较大的数据集，最近(2014)的趋势是增加层的数量和大小同时使用dropout方法解决过拟合。</p>
+<p>GoogLeNet作为一个22层的网络模型，借鉴了很多Network in Network中的思想：<br>使用带有ReLU的1x1的卷积，主要为了降维以降低运算量，增大网络规模，加深加宽网络。</p>
+<h1 id="3__u8BBE_u8BA1_u52A8_u673A_u4E0E_u8003_u8651"><a href="#3__u8BBE_u8BA1_u52A8_u673A_u4E0E_u8003_u8651" class="headerlink" title="3 设计动机与考虑"></a>3 设计动机与考虑</h1><p>最直接提高深度神经网络性能的方法是增加其规模，包括通过增加层数以增大深度，通过增加每一层的节点数以增加宽度。</p>
+<p>然而这种简单的解决方法有两大缺陷：</p>
+<ol>
+<li>更大的网络规模往往意味着更多的参数，这使得扩大后的网络更易过拟合</li>
+<li>增大网络还会带来计算资源需求的暴增，如果增加计算的部分没有被有效使用（比如大部分的权值趋于0），那么大量的宝贵计算能力会被浪费</li>
+</ol>
+<p>解决这两个问题的基本方法最终一般是把全连接改成稀疏连接的结构，甚至在卷积层也采用稀疏连接的结构。（采用了赫布原则(Hebbian principle)的思想）<br>然而当涉及大量非统一的（non-uniform）稀疏的数据结构的计算时，现在的计算设备效率很低。因此目前大部分面向机器学习的系统都利用卷积的优势在空间域中使用稀疏性。然而如果使用AlexNet的结构，那么为了更好的优化并行计算又有返回全连接方式的趋势。为了均衡计算效率和模型稀疏性，作者提出了Inception结构。</p>
+<h1 id="4__u7ED3_u6784_u7EC6_u8282"><a href="#4__u7ED3_u6784_u7EC6_u8282" class="headerlink" title="4 结构细节"></a>4 结构细节</h1><p>Inception模块是一层一层往上栈式堆叠的，所以它们输出的关联性统计会产生变化：更高层抽象的特征会由更高层次所捕获，而它们的空间聚集度会随之降低，因为随着层次的升高，3×3和5×5的卷积的比例也会随之升高。如下图所示：<br><img src="/2017/04/20/paper-notes-inceptionv1/naive-inception.jpg" alt="naive-inception.jpg" title=""></p>
+<p>然而这样的结构会导致计算量的爆炸增长，因此作者采用1x1的卷积在3x3和5x5卷积之前降维:<br><img src="/2017/04/20/paper-notes-inceptionv1/inception.jpg" alt="inception.jpg" title=""></p>
+<p>该设计还符合了：视觉信息应该被多层次处理，然后被汇集到下面层次汇总，同时抽取多尺度特征的思想。</p>
+<h1 id="5_GoogLeNet"><a href="#5_GoogLeNet" class="headerlink" title="5 GoogLeNet"></a>5 GoogLeNet</h1><p>网络各层信息如下所示：<br><img src="/2017/04/20/paper-notes-inceptionv1/googlenet.jpg" alt="googlenet.jpg" title=""><br>其中3x3 reduce, 5x5 reduce表示在相应卷积之前进行降维的1x1卷积。<br>对于每一个Inception模块，其内部的卷积及池化(pool proj)都做了维持输入输出图像长宽不变的padding，最后将1x1, 3x3, 5x5, pool proj的输出（因为其长宽均相同）的通道叠加作为整个Inception模块输出。</p>
+<p>如果只计算包含参数的层，整个网络有22层；如果算上池化层则有27层。</p>
+<p>同时参考Network in Network，GoogLeNet采用了全局平均池化代替全连接层（但仍保留了一个线性层方便正对其它标签数据集fine-tune）进行分类因此Top1的准确率提高了0.6%，但dropout还是需要的。</p>
+<p>因为网络较深而且GoogLeNet中层产生的特征也具有很好区分度，所以GoogLeNet在中间层(INception4a, Inception4d)加了两个辅助分类器，训练时辅助分类器的loss*0.3加回到总loss中，在预测时不适用辅助分类器。</p>
+<h1 id="6__u8BAD_u7EC3_u65B9_u6CD5"><a href="#6__u8BAD_u7EC3_u65B9_u6CD5" class="headerlink" title="6 训练方法"></a>6 训练方法</h1><p>GoogLeNet采用了<a href="http://papers.nips.cc/paper/4687-large-scale-distributed-deep-networks.pdf" target="_blank" rel="external">Large scale distributed deep networks</a>提出的分布置信网络(DistBelief)。</p>
+<p>使用Momentum=0.9的SGD，learning rate每8个epoch降低4%。</p>
+]]></content>
+    </entry>
+    
+    <entry>
       <title><![CDATA[Very deep convolutional networks for large-scale image recognition - 论文笔记]]></title>
       <url>http://wentaoma.com/2017/04/18/paper-notes-vggnet/</url>
       <content type="html"><![CDATA[<p>原文地址:<a href="https://arxiv.org/abs/1409.1556" target="_blank" rel="external">Very deep convolutional networks for large-scale image recognition</a><br>VggNet在ILSVRC-2014上分别获得定位和分类项目中第一名和第二名的成绩，其主要采用3x3的小卷积并将模型深度增加到16-19层。<br><a id="more"></a></p>
