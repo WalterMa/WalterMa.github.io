@@ -4,6 +4,38 @@
   
     
     <entry>
+      <title><![CDATA[Deep Residual Learning for Image Recognition - 论文笔记]]></title>
+      <url>http://wentaoma.com/2017/04/23/paper-notes-resnet/</url>
+      <content type="html"><![CDATA[<p>原文地址:<a href="https://arxiv.org/abs/1512.03385" target="_blank" rel="external">Deep Residual Learning for Image Recognition</a><br>ResNet采用了深度残差学习的方法将网络深度大大加深，在实现过程中作者使用了诸如恒等映射等先验知识很值得参考。<br><a id="more"></a></p>
+<h1 id="u8BBA_u6587_u80CC_u666F"><a href="#u8BBA_u6587_u80CC_u666F" class="headerlink" title="论文背景"></a>论文背景</h1><p>深度卷积神经网络在图像分类领域带来了一系列突破。深度网络可以很自然的将低/中/高层特征和分类器整合进一个端到端(end to end)的多层模型中，而特征的“级别”(“levels”)可以通过堆叠层的数量（深度）来丰富。最近结果显示，模型的深度发挥着至关重要的作用，这样导致了ImageNet竞赛的参赛模型都趋向于“非常深”——16 层 到30层 。许多其它的视觉识别任务的也都得益于非常深的模型。</p>
+<p>在深度的重要性的驱使下，出现了一个新的问题：训练一个更好的网络是否就像堆叠更多的层一样简单呢？解决这一问题的障碍之一便是困扰人们很久的梯度消失/梯度爆炸，这从一开始便阻碍了模型的收敛。归一初始化（normalized initialization）和中间归一化（intermediate normalization）在很大程度上解决了这一问题，它使得采用SGD反向传播算法的数十层的网络能够开始收敛。</p>
+<p>当深层网络可以开始收敛时，又出现了另一个问题——退化(degradation)：随着网络深度的增加，准确率增加到一定程度后反而开始迅速衰减。然而，这种现象并不是由过拟合造成的：因为在一个适当的模型中增加更多的层却导致了如下图所示的更高的错误率:<br><img src="/2017/04/23/paper-notes-resnet/figure1.jpg" alt="figure1.jpg" title=""></p>
+<p>退化的出现表明了并非所有的系统都是容易优化的。因此作者提出了深度残差学习来解决退化问题：</p>
+<h1 id="u5230_u5E95_u4EC0_u4E48_u662F_u6DF1_u5EA6_u6B8B_u5DEE_u5B66_u4E60"><a href="#u5230_u5E95_u4EC0_u4E48_u662F_u6DF1_u5EA6_u6B8B_u5DEE_u5B66_u4E60" class="headerlink" title="到底什么是深度残差学习"></a>到底什么是深度残差学习</h1><p>首先考虑这样一种情况：<br>对于一个深层版本网络，如果只使用恒等映射(identity mapping来构建新增加的层，其它的层由浅层版本中直接复制而来——即让新增加的层表达式为f(x)=x 。这时候将浅层网络视为映射H(x)，当深层网络新增加的层都为恒等映射f(x’)=x’时：新增加的层接受底层输入为x’=H(x)，因此深层网络最后输出应为 f(H(x))=H(x) 和浅层网络一样。<br>在这种情况下，一个更深的模型不应当产生比它的浅层版本更高的训练错误率。</p>
+<p>那么之前的退化现象又是怎么回事？这可能是因为增加的多个非线性层很难来估计出一个恒等映射。</p>
+<p>为了解决这一点，作者基于<strong>增加层如果为恒等映射那么更深层网络不应该比浅层网络产生更高错误率</strong>的思想，提出了深度残差学习：</p>
+<p>即使用如下图所示的模块来增加网络深度：<br><img src="/2017/04/23/paper-notes-resnet/building-block.jpg" alt="building-block.jpg" title=""><br>这个模块直接通过shorcut connections方式为增加层引入了一个恒等映射，让原来的卷积层去学习拟合另一个映射F(x)</p>
+<p>如果我们将浅层网络视作映射H(x)，深层网络视作H’(x)的话，那么由于增加的层直接引入了恒等映射，所以H’(x)=H(x)+F(x)</p>
+<p>极端情况下，即恒等映射是增加层的最优解，那么直接将F(x)置为0（卷积层权重、偏差为0）即可，远比使用多个非线性层来拟合恒等映射简单。</p>
+<p>作者将这样一个F(x)称之为残差映射(residual mapping)。参考极端情况下的例子，作者推断残差映射比原始未参考的映射(unreferenced mapping)更容易优化。</p>
+<p>同时出于计算量的考量，作者在之前结构上修改提出了bottleneck的结构：<br><img src="/2017/04/23/paper-notes-resnet/bottleneck.png" alt="bottleneck.png" title=""></p>
+<p>这种构造网络的方式即称为深度残差学习。</p>
+<h1 id="u7F51_u7EDC_u7ED3_u6784"><a href="#u7F51_u7EDC_u7ED3_u6784" class="headerlink" title="网络结构"></a>网络结构</h1><p>整体参考VGGNet，<br>卷积层主要为3*3的滤波器，并且遵循：输出特征尺寸相同的层含有相同数量的滤波器；如果特征尺寸减半，则滤波器的数量增加一倍来保证每层的时间复杂度相同。<br>直接通过stride为2的卷积层来进行下采样。<br>分类使用使用全局平均池化和一个1000类的全连接层代替VGG的三个全连接层。</p>
+<img src="/2017/04/23/paper-notes-resnet/arch.png" alt="arch.png" title="">
+<p>在上图每个用大括号的卷积层都使用shorcut连接。</p>
+<p>模型构建好后进行实验，在plain上观测到明显的退化现象，而且ResNet上不仅没有退化，34层网络的效果反而比18层的更好，而且不仅如此，同等层数下ResNet的收敛速度比plain的要快得多。<br><img src="/2017/04/23/paper-notes-resnet/test.png" alt="test.png" title=""></p>
+<p>对于shortcut的方式，作者提出了三个选项：<br>A. 使用恒等映射，如果residual block的输入输出维度不一致，对增加的维度用0来填充；<br>B. 在block输入输出维度一致时使用恒等映射，不一致时使用线性投影以保证维度一致；<br>C. 对于所有的block均使用线性投影。<br>对这三个选项都进行了实验，发现虽然C的效果好于B的效果好于A的效果，但是差距很小，因此线性投影并不是必需的，而使用0填充时，可以保证模型的复杂度最低，这对于更深的网络是更加有利的。</p>
+<h1 id="u5B9E_u73B0_u7EC6_u8282"><a href="#u5B9E_u73B0_u7EC6_u8282" class="headerlink" title="实现细节"></a>实现细节</h1><p>数据扩增：</p>
+<ol>
+<li>调整图像的大小使它的短边长度随机的从[256,480]中采样来增加图像尺度。</li>
+<li>从一张图像或者它的水平翻转图像中随机采样一个224*224的crop，每个像素都减去均值。图像使用标准的颜色增强</li>
+</ol>
+<p>在每一个卷积层之后，激活层之前均使用batch normalization。<br>根据 <a href="https://arxiv.org/abs/1502.01852" target="_blank" rel="external">https://arxiv.org/abs/1502.01852</a> 来初始化权值然后从零开始训练所有plain/残差网络。<br>我们使用的mini-batch的尺寸为256。学习率从0.1开始，每当错误率平稳时将学习率除以10，整个模型进行60∗10^4次迭代训练。我们将权值衰减设置为0.0001，动量为0.9。不使用dropout</p>
+<p>在测试中，采取标准的10-crop（四角+中心*翻转）测试。<br>同时使用全卷积形式，并在多个尺度（{224,256,384,480,640}）的结果上取平均分。</p>
+]]></content>
+    </entry>
+    
+    <entry>
       <title><![CDATA[Going deeper with convolutions - 论文笔记]]></title>
       <url>http://wentaoma.com/2017/04/20/paper-notes-inceptionv1/</url>
       <content type="html"><![CDATA[<p>原文地址:<a href="https://arxiv.org/abs/1409.4842v1" target="_blank" rel="external">Going deeper with convolutions</a><br>GoogLeNet(Inception v1)通过重新设计网络结构在维持计算消耗不变同时增加了网络宽和深。<br><a id="more"></a></p>

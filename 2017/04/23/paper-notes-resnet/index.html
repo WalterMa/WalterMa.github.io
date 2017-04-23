@@ -84,19 +84,21 @@
 
 
 
-<meta name="description" content="原文地址:Going deeper with convolutionsGoogLeNet(Inception v1)通过重新设计网络结构在维持计算消耗不变同时增加了网络宽和深。">
+<meta name="description" content="原文地址:Deep Residual Learning for Image RecognitionResNet采用了深度残差学习的方法将网络深度大大加深，在实现过程中作者使用了诸如恒等映射等先验知识很值得参考。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Going deeper with convolutions - 论文笔记">
-<meta property="og:url" content="http://wentaoma.com/2017/04/20/paper-notes-inceptionv1/index.html">
+<meta property="og:title" content="Deep Residual Learning for Image Recognition - 论文笔记">
+<meta property="og:url" content="http://wentaoma.com/2017/04/23/paper-notes-resnet/index.html">
 <meta property="og:site_name" content="Wentao">
-<meta property="og:description" content="原文地址:Going deeper with convolutionsGoogLeNet(Inception v1)通过重新设计网络结构在维持计算消耗不变同时增加了网络宽和深。">
-<meta property="og:image" content="http://wentaoma.com/2017/04/20/paper-notes-inceptionv1/naive-inception.jpg">
-<meta property="og:image" content="http://wentaoma.com/2017/04/20/paper-notes-inceptionv1/inception.jpg">
-<meta property="og:image" content="http://wentaoma.com/2017/04/20/paper-notes-inceptionv1/googlenet.jpg">
-<meta property="og:updated_time" content="2017-04-21T06:39:53.136Z">
+<meta property="og:description" content="原文地址:Deep Residual Learning for Image RecognitionResNet采用了深度残差学习的方法将网络深度大大加深，在实现过程中作者使用了诸如恒等映射等先验知识很值得参考。">
+<meta property="og:image" content="http://wentaoma.com/2017/04/23/paper-notes-resnet/figure1.jpg">
+<meta property="og:image" content="http://wentaoma.com/2017/04/23/paper-notes-resnet/building-block.jpg">
+<meta property="og:image" content="http://wentaoma.com/2017/04/23/paper-notes-resnet/bottleneck.png">
+<meta property="og:image" content="http://wentaoma.com/2017/04/23/paper-notes-resnet/arch.png">
+<meta property="og:image" content="http://wentaoma.com/2017/04/23/paper-notes-resnet/test.png">
+<meta property="og:updated_time" content="2017-04-23T08:12:02.870Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Going deeper with convolutions - 论文笔记">
-<meta name="twitter:description" content="原文地址:Going deeper with convolutionsGoogLeNet(Inception v1)通过重新设计网络结构在维持计算消耗不变同时增加了网络宽和深。">
+<meta name="twitter:title" content="Deep Residual Learning for Image Recognition - 论文笔记">
+<meta name="twitter:description" content="原文地址:Deep Residual Learning for Image RecognitionResNet采用了深度残差学习的方法将网络深度大大加深，在实现过程中作者使用了诸如恒等映射等先验知识很值得参考。">
 
 
 
@@ -117,9 +119,9 @@
 
 
 
-  <link rel="canonical" href="http://wentaoma.com/2017/04/20/paper-notes-inceptionv1/"/>
+  <link rel="canonical" href="http://wentaoma.com/2017/04/23/paper-notes-resnet/"/>
 
-  <title> Going deeper with convolutions - 论文笔记 | Wentao </title>
+  <title> Deep Residual Learning for Image Recognition - 论文笔记 | Wentao </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -262,7 +264,7 @@
             
             
               
-                Going deeper with convolutions - 论文笔记
+                Deep Residual Learning for Image Recognition - 论文笔记
               
             
           </h1>
@@ -274,8 +276,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2017-04-20T13:33:51+08:00" content="2017-04-20">
-              2017-04-20
+            <time itemprop="dateCreated" datetime="2017-04-23T10:12:22+08:00" content="2017-04-23">
+              2017-04-23
             </time>
           </span>
 
@@ -285,8 +287,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2017/04/20/paper-notes-inceptionv1/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/04/20/paper-notes-inceptionv1/" itemprop="commentsCount"></span>
+                <a href="/2017/04/23/paper-notes-resnet/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/04/23/paper-notes-resnet/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -309,26 +311,32 @@
       
 
       
-        <p>原文地址:<a href="https://arxiv.org/abs/1409.4842v1" target="_blank" rel="external">Going deeper with convolutions</a><br>GoogLeNet(Inception v1)通过重新设计网络结构在维持计算消耗不变同时增加了网络宽和深。<br><a id="more"></a></p>
-<h1 id="1__u5F15_u8A00"><a href="#1__u5F15_u8A00" class="headerlink" title="1 引言"></a>1 引言</h1><p>最近(2014)三年，主要由于深度学习和越来越实际的卷积网络的发展，图像识别以及物体检测的质量都在飞速提高。大多数进步并不只是更强大的硬件、更大的数据库和模型所带来的，而主要是一些新创意、新算法，以及优化的网络结构的成果。随着移动计算和嵌入式计算得到越来越广泛的认同，我们的算法的效率——尤其是其能量和存储利用率——变得越来越重要。值得注意的是，这篇文章中展现的深度结构在设计时就考虑了这些因素(大部分时候前馈模型计算量限制15亿次乘加运算左右)，而不仅是执着于单纯提高精度。</p>
-<h1 id="2__u76F8_u5173_u5DE5_u4F5C"><a href="#2__u76F8_u5173_u5DE5_u4F5C" class="headerlink" title="2 相关工作"></a>2 相关工作</h1><p>从LeNet-5开始，CNN通常就使用一种标准结构：一些堆叠的卷积层（后面通常跟随归一化和最大池化层）的后面接上一个或多个全连接层。采用这种基本设计的网络越来越流行并在MNIST、CIFAR尤其是ImageNet分类竞赛取得了最佳结果。 对于如ImageNet等较大的数据集，最近(2014)的趋势是增加层的数量和大小同时使用dropout方法解决过拟合。</p>
-<p>GoogLeNet作为一个22层的网络模型，借鉴了很多Network in Network中的思想：<br>使用带有ReLU的1x1的卷积，主要为了降维以降低运算量，增大网络规模，加深加宽网络。</p>
-<h1 id="3__u8BBE_u8BA1_u52A8_u673A_u4E0E_u8003_u8651"><a href="#3__u8BBE_u8BA1_u52A8_u673A_u4E0E_u8003_u8651" class="headerlink" title="3 设计动机与考虑"></a>3 设计动机与考虑</h1><p>最直接提高深度神经网络性能的方法是增加其规模，包括通过增加层数以增大深度，通过增加每一层的节点数以增加宽度。</p>
-<p>然而这种简单的解决方法有两大缺陷：</p>
+        <p>原文地址:<a href="https://arxiv.org/abs/1512.03385" target="_blank" rel="external">Deep Residual Learning for Image Recognition</a><br>ResNet采用了深度残差学习的方法将网络深度大大加深，在实现过程中作者使用了诸如恒等映射等先验知识很值得参考。<br><a id="more"></a></p>
+<h1 id="u8BBA_u6587_u80CC_u666F"><a href="#u8BBA_u6587_u80CC_u666F" class="headerlink" title="论文背景"></a>论文背景</h1><p>深度卷积神经网络在图像分类领域带来了一系列突破。深度网络可以很自然的将低/中/高层特征和分类器整合进一个端到端(end to end)的多层模型中，而特征的“级别”(“levels”)可以通过堆叠层的数量（深度）来丰富。最近结果显示，模型的深度发挥着至关重要的作用，这样导致了ImageNet竞赛的参赛模型都趋向于“非常深”——16 层 到30层 。许多其它的视觉识别任务的也都得益于非常深的模型。</p>
+<p>在深度的重要性的驱使下，出现了一个新的问题：训练一个更好的网络是否就像堆叠更多的层一样简单呢？解决这一问题的障碍之一便是困扰人们很久的梯度消失/梯度爆炸，这从一开始便阻碍了模型的收敛。归一初始化（normalized initialization）和中间归一化（intermediate normalization）在很大程度上解决了这一问题，它使得采用SGD反向传播算法的数十层的网络能够开始收敛。</p>
+<p>当深层网络可以开始收敛时，又出现了另一个问题——退化(degradation)：随着网络深度的增加，准确率增加到一定程度后反而开始迅速衰减。然而，这种现象并不是由过拟合造成的：因为在一个适当的模型中增加更多的层却导致了如下图所示的更高的错误率:<br><img src="/2017/04/23/paper-notes-resnet/figure1.jpg" alt="figure1.jpg" title=""></p>
+<p>退化的出现表明了并非所有的系统都是容易优化的。因此作者提出了深度残差学习来解决退化问题：</p>
+<h1 id="u5230_u5E95_u4EC0_u4E48_u662F_u6DF1_u5EA6_u6B8B_u5DEE_u5B66_u4E60"><a href="#u5230_u5E95_u4EC0_u4E48_u662F_u6DF1_u5EA6_u6B8B_u5DEE_u5B66_u4E60" class="headerlink" title="到底什么是深度残差学习"></a>到底什么是深度残差学习</h1><p>首先考虑这样一种情况：<br>对于一个深层版本网络，如果只使用恒等映射(identity mapping来构建新增加的层，其它的层由浅层版本中直接复制而来——即让新增加的层表达式为f(x)=x 。这时候将浅层网络视为映射H(x)，当深层网络新增加的层都为恒等映射f(x’)=x’时：新增加的层接受底层输入为x’=H(x)，因此深层网络最后输出应为 f(H(x))=H(x) 和浅层网络一样。<br>在这种情况下，一个更深的模型不应当产生比它的浅层版本更高的训练错误率。</p>
+<p>那么之前的退化现象又是怎么回事？这可能是因为增加的多个非线性层很难来估计出一个恒等映射。</p>
+<p>为了解决这一点，作者基于<strong>增加层如果为恒等映射那么更深层网络不应该比浅层网络产生更高错误率</strong>的思想，提出了深度残差学习：</p>
+<p>即使用如下图所示的模块来增加网络深度：<br><img src="/2017/04/23/paper-notes-resnet/building-block.jpg" alt="building-block.jpg" title=""><br>这个模块直接通过shorcut connections方式为增加层引入了一个恒等映射，让原来的卷积层去学习拟合另一个映射F(x)</p>
+<p>如果我们将浅层网络视作映射H(x)，深层网络视作H’(x)的话，那么由于增加的层直接引入了恒等映射，所以H’(x)=H(x)+F(x)</p>
+<p>极端情况下，即恒等映射是增加层的最优解，那么直接将F(x)置为0（卷积层权重、偏差为0）即可，远比使用多个非线性层来拟合恒等映射简单。</p>
+<p>作者将这样一个F(x)称之为残差映射(residual mapping)。参考极端情况下的例子，作者推断残差映射比原始未参考的映射(unreferenced mapping)更容易优化。</p>
+<p>同时出于计算量的考量，作者在之前结构上修改提出了bottleneck的结构：<br><img src="/2017/04/23/paper-notes-resnet/bottleneck.png" alt="bottleneck.png" title=""></p>
+<p>这种构造网络的方式即称为深度残差学习。</p>
+<h1 id="u7F51_u7EDC_u7ED3_u6784"><a href="#u7F51_u7EDC_u7ED3_u6784" class="headerlink" title="网络结构"></a>网络结构</h1><p>整体参考VGGNet，<br>卷积层主要为3*3的滤波器，并且遵循：输出特征尺寸相同的层含有相同数量的滤波器；如果特征尺寸减半，则滤波器的数量增加一倍来保证每层的时间复杂度相同。<br>直接通过stride为2的卷积层来进行下采样。<br>分类使用使用全局平均池化和一个1000类的全连接层代替VGG的三个全连接层。</p>
+<img src="/2017/04/23/paper-notes-resnet/arch.png" alt="arch.png" title="">
+<p>在上图每个用大括号的卷积层都使用shorcut连接。</p>
+<p>模型构建好后进行实验，在plain上观测到明显的退化现象，而且ResNet上不仅没有退化，34层网络的效果反而比18层的更好，而且不仅如此，同等层数下ResNet的收敛速度比plain的要快得多。<br><img src="/2017/04/23/paper-notes-resnet/test.png" alt="test.png" title=""></p>
+<p>对于shortcut的方式，作者提出了三个选项：<br>A. 使用恒等映射，如果residual block的输入输出维度不一致，对增加的维度用0来填充；<br>B. 在block输入输出维度一致时使用恒等映射，不一致时使用线性投影以保证维度一致；<br>C. 对于所有的block均使用线性投影。<br>对这三个选项都进行了实验，发现虽然C的效果好于B的效果好于A的效果，但是差距很小，因此线性投影并不是必需的，而使用0填充时，可以保证模型的复杂度最低，这对于更深的网络是更加有利的。</p>
+<h1 id="u5B9E_u73B0_u7EC6_u8282"><a href="#u5B9E_u73B0_u7EC6_u8282" class="headerlink" title="实现细节"></a>实现细节</h1><p>数据扩增：</p>
 <ol>
-<li>更大的网络规模往往意味着更多的参数，这使得扩大后的网络更易过拟合</li>
-<li>增大网络还会带来计算资源需求的暴增，如果增加计算的部分没有被有效使用（比如大部分的权值趋于0），那么大量的宝贵计算能力会被浪费</li>
+<li>调整图像的大小使它的短边长度随机的从[256,480]中采样来增加图像尺度。</li>
+<li>从一张图像或者它的水平翻转图像中随机采样一个224*224的crop，每个像素都减去均值。图像使用标准的颜色增强</li>
 </ol>
-<p>解决这两个问题的基本方法最终一般是把全连接改成稀疏连接的结构，甚至在卷积层也采用稀疏连接的结构。（采用了赫布原则(Hebbian principle)的思想）<br>然而当涉及大量非统一的（non-uniform）稀疏的数据结构的计算时，现在的计算设备效率很低。因此目前大部分面向机器学习的系统都利用卷积的优势在空间域中使用稀疏性。然而如果使用AlexNet的结构，那么为了更好的优化并行计算又有返回全连接方式的趋势。为了均衡计算效率和模型稀疏性，作者提出了Inception结构。</p>
-<h1 id="4__u7ED3_u6784_u7EC6_u8282"><a href="#4__u7ED3_u6784_u7EC6_u8282" class="headerlink" title="4 结构细节"></a>4 结构细节</h1><p>Inception模块是一层一层往上栈式堆叠的，所以它们输出的关联性统计会产生变化：更高层抽象的特征会由更高层次所捕获，而它们的空间聚集度会随之降低，因为随着层次的升高，3×3和5×5的卷积的比例也会随之升高。如下图所示：<br><img src="/2017/04/20/paper-notes-inceptionv1/naive-inception.jpg" alt="naive-inception.jpg" title=""></p>
-<p>然而这样的结构会导致计算量的爆炸增长，因此作者采用1x1的卷积在3x3和5x5卷积之前降维:<br><img src="/2017/04/20/paper-notes-inceptionv1/inception.jpg" alt="inception.jpg" title=""></p>
-<p>该设计还符合了：视觉信息应该被多层次处理，然后被汇集到下面层次汇总，同时抽取多尺度特征的思想。</p>
-<h1 id="5_GoogLeNet"><a href="#5_GoogLeNet" class="headerlink" title="5 GoogLeNet"></a>5 GoogLeNet</h1><p>网络各层信息如下所示：<br><img src="/2017/04/20/paper-notes-inceptionv1/googlenet.jpg" alt="googlenet.jpg" title=""><br>其中3x3 reduce, 5x5 reduce表示在相应卷积之前进行降维的1x1卷积。<br>对于每一个Inception模块，其内部的卷积及池化(pool proj)都做了维持输入输出图像长宽不变的padding，最后将1x1, 3x3, 5x5, pool proj的输出（因为其长宽均相同）的通道叠加作为整个Inception模块输出。</p>
-<p>如果只计算包含参数的层，整个网络有22层；如果算上池化层则有27层。</p>
-<p>同时参考Network in Network，GoogLeNet采用了全局平均池化代替全连接层（但仍保留了一个线性层方便正对其它标签数据集fine-tune）进行分类因此Top1的准确率提高了0.6%，但dropout还是需要的。</p>
-<p>因为网络较深而且GoogLeNet中层产生的特征也具有很好区分度，所以GoogLeNet在中间层(INception4a, Inception4d)加了两个辅助分类器，训练时辅助分类器的loss*0.3加回到总loss中，在预测时不适用辅助分类器。</p>
-<h1 id="6__u8BAD_u7EC3_u65B9_u6CD5"><a href="#6__u8BAD_u7EC3_u65B9_u6CD5" class="headerlink" title="6 训练方法"></a>6 训练方法</h1><p>GoogLeNet采用了<a href="http://papers.nips.cc/paper/4687-large-scale-distributed-deep-networks.pdf" target="_blank" rel="external">Large scale distributed deep networks</a>提出的分布置信网络(DistBelief)。</p>
-<p>使用Momentum=0.9的SGD，learning rate每8个epoch降低4%。</p>
+<p>在每一个卷积层之后，激活层之前均使用batch normalization。<br>根据 <a href="https://arxiv.org/abs/1502.01852" target="_blank" rel="external">https://arxiv.org/abs/1502.01852</a> 来初始化权值然后从零开始训练所有plain/残差网络。<br>我们使用的mini-batch的尺寸为256。学习率从0.1开始，每当错误率平稳时将学习率除以10，整个模型进行60∗10^4次迭代训练。我们将权值衰减设置为0.0001，动量为0.9。不使用dropout</p>
+<p>在测试中，采取标准的10-crop（四角+中心*翻转）测试。<br>同时使用全卷积形式，并在多个尺度（{224,256,384,480,640}）的结果上取平均分。</p>
 
       
     </div>
@@ -362,17 +370,13 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/04/18/paper-notes-vggnet/" rel="next" title="Very deep convolutional networks for large-scale image recognition - 论文笔记">
-                <i class="fa fa-chevron-left"></i> Very deep convolutional networks for large-scale image recognition - 论文笔记
+              <a href="/2017/04/20/paper-notes-inceptionv1/" rel="next" title="Going deeper with convolutions - 论文笔记">
+                <i class="fa fa-chevron-left"></i> Going deeper with convolutions - 论文笔记
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2017/04/23/paper-notes-resnet/" rel="prev" title="Deep Residual Learning for Image Recognition - 论文笔记">
-                Deep Residual Learning for Image Recognition - 论文笔记 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -387,10 +391,10 @@
 
     <div class="post-spread">
       
-        <div class="ds-share flat" data-thread-key="2017/04/20/paper-notes-inceptionv1/"
-     data-title="Going deeper with convolutions - 论文笔记"
+        <div class="ds-share flat" data-thread-key="2017/04/23/paper-notes-resnet/"
+     data-title="Deep Residual Learning for Image Recognition - 论文笔记"
      data-content=""
-     data-url="http://wentaoma.com/2017/04/20/paper-notes-inceptionv1/">
+     data-url="http://wentaoma.com/2017/04/23/paper-notes-resnet/">
   <div class="ds-share-inline">
     <ul  class="ds-share-icons-16">
 
@@ -417,8 +421,8 @@
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2017/04/20/paper-notes-inceptionv1/"
-           data-title="Going deeper with convolutions - 论文笔记" data-url="http://wentaoma.com/2017/04/20/paper-notes-inceptionv1/">
+      <div class="ds-thread" data-thread-key="2017/04/23/paper-notes-resnet/"
+           data-title="Deep Residual Learning for Image Recognition - 论文笔记" data-url="http://wentaoma.com/2017/04/23/paper-notes-resnet/">
       </div>
     
   </div>
@@ -502,7 +506,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1__u5F15_u8A00"><span class="nav-number">1.</span> <span class="nav-text">1 引言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2__u76F8_u5173_u5DE5_u4F5C"><span class="nav-number">2.</span> <span class="nav-text">2 相关工作</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3__u8BBE_u8BA1_u52A8_u673A_u4E0E_u8003_u8651"><span class="nav-number">3.</span> <span class="nav-text">3 设计动机与考虑</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4__u7ED3_u6784_u7EC6_u8282"><span class="nav-number">4.</span> <span class="nav-text">4 结构细节</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5_GoogLeNet"><span class="nav-number">5.</span> <span class="nav-text">5 GoogLeNet</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#6__u8BAD_u7EC3_u65B9_u6CD5"><span class="nav-number">6.</span> <span class="nav-text">6 训练方法</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#u8BBA_u6587_u80CC_u666F"><span class="nav-number">1.</span> <span class="nav-text">论文背景</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#u5230_u5E95_u4EC0_u4E48_u662F_u6DF1_u5EA6_u6B8B_u5DEE_u5B66_u4E60"><span class="nav-number">2.</span> <span class="nav-text">到底什么是深度残差学习</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#u7F51_u7EDC_u7ED3_u6784"><span class="nav-number">3.</span> <span class="nav-text">网络结构</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#u5B9E_u73B0_u7EC6_u8282"><span class="nav-number">4.</span> <span class="nav-text">实现细节</span></a></li></ol></div>
             
           </div>
         </section>
