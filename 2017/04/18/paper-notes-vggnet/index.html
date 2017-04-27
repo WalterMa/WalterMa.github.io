@@ -85,6 +85,7 @@
 
 
 <meta name="description" content="原文地址:Very deep convolutional networks for large-scale image recognitionVggNet在ILSVRC-2014上分别获得定位和分类项目中第一名和第二名的成绩，其主要采用3x3的小卷积并将模型深度增加到16-19层。">
+<meta name="keywords" content="DeepLearning,PaperNotes">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Very deep convolutional networks for large-scale image recognition - 论文笔记">
 <meta property="og:url" content="http://wentaoma.com/2017/04/18/paper-notes-vggnet/index.html">
@@ -100,6 +101,7 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Very deep convolutional networks for large-scale image recognition - 论文笔记">
 <meta name="twitter:description" content="原文地址:Very deep convolutional networks for large-scale image recognitionVggNet在ILSVRC-2014上分别获得定位和分类项目中第一名和第二名的成绩，其主要采用3x3的小卷积并将模型深度增加到16-19层。">
+<meta name="twitter:image" content="http://wentaoma.com/2017/04/18/paper-notes-vggnet/nets.png">
 
 
 
@@ -313,16 +315,16 @@
 
       
         <p>原文地址:<a href="https://arxiv.org/abs/1409.1556" target="_blank" rel="external">Very deep convolutional networks for large-scale image recognition</a><br>VggNet在ILSVRC-2014上分别获得定位和分类项目中第一名和第二名的成绩，其主要采用3x3的小卷积并将模型深度增加到16-19层。<br><a id="more"></a></p>
-<h1 id="1__u4ECB_u7ECD"><a href="#1__u4ECB_u7ECD" class="headerlink" title="1 介绍"></a>1 介绍</h1><p>卷积网络(ConvNets)最近(2014)在大规模的图像和视频识别中获得了很大的成功，这可能由于大型公共图像库（如 ImageNet）以及高性能计算系统（如GPU或大规模分布式集群）。特别是在深度视觉识别结构发展中扮演了重要角色的ImageNet大规模视觉识别大赛(ImageNet Large-ScaleVisual Recognition Challenge, ILSVRC)为从高维浅层特征编码 (ILSVRC-2011冠军)到深度卷积网络(ILSVRC-2012冠军)的几代大规模图像分类系统提供了测试平台。</p>
+<h1 id="1-介绍"><a href="#1-介绍" class="headerlink" title="1 介绍"></a>1 介绍</h1><p>卷积网络(ConvNets)最近(2014)在大规模的图像和视频识别中获得了很大的成功，这可能由于大型公共图像库（如 ImageNet）以及高性能计算系统（如GPU或大规模分布式集群）。特别是在深度视觉识别结构发展中扮演了重要角色的ImageNet大规模视觉识别大赛(ImageNet Large-ScaleVisual Recognition Challenge, ILSVRC)为从高维浅层特征编码 (ILSVRC-2011冠军)到深度卷积网络(ILSVRC-2012冠军)的几代大规模图像分类系统提供了测试平台。</p>
 <p>随着卷积网络在计算机视觉领域的应用越来越广泛，为了获得更高的准确率，越来越多的人尝试在<a href="https://papers.nips.cc/paper/4824-imagenet-classification-with-deep-convolutional-neural-networks" target="_blank" rel="external">Krizhevsky et al. (2012)</a>中的原始框架上进行改进。例如，ILSVRC-2013最好的参赛模型在第一个卷积层上使用了较小的接受域窗口(smaller receptive window size)以及较小的滑动步长。另一种改进方案是在整张图像及其多个尺度上稠密的训练和测试网络。本文中，我们关注了卷积网络结构设计中的另一个重要因素——深度。为此，我们固定了网络框架的其他参数，然后逐步通过增加更多的卷积层来增加网络的深度。由于我们在所有层都是用非常小(3×3)的卷积滤波器，因此这是可行的方法。</p>
-<h1 id="2__u5377_u79EF_u7F51_u7EDC_u8BBE_u7F6E"><a href="#2__u5377_u79EF_u7F51_u7EDC_u8BBE_u7F6E" class="headerlink" title="2 卷积网络设置"></a>2 卷积网络设置</h1><p>作者为了在公平的环境下衡量由增加的卷积层深度所带来的效果，所有的卷积层都用相同的原则来设计。</p>
-<h2 id="2-1__u7ED3_u6784"><a href="#2-1__u7ED3_u6784" class="headerlink" title="2.1 结构"></a>2.1 结构</h2><p>在训练阶段，采用224x224的固定大小RGB图像做输入，唯一的预处理操作就是计算出整个训练集的每个像素RGB均值。（此处预处理和ALexNet相同）。</p>
+<h1 id="2-卷积网络设置"><a href="#2-卷积网络设置" class="headerlink" title="2 卷积网络设置"></a>2 卷积网络设置</h1><p>作者为了在公平的环境下衡量由增加的卷积层深度所带来的效果，所有的卷积层都用相同的原则来设计。</p>
+<h2 id="2-1-结构"><a href="#2-1-结构" class="headerlink" title="2.1 结构"></a>2.1 结构</h2><p>在训练阶段，采用224x224的固定大小RGB图像做输入，唯一的预处理操作就是计算出整个训练集的每个像素RGB均值。（此处预处理和ALexNet相同）。</p>
 <p>输入图像被送进使用3x3小卷积的卷积层栈中。在某一个网络设置中，作者也使用了1x1的卷积核，1x1的卷积核可以看作是对输入通道做了一个线性变换(之后接一个非线性操作)。所有卷积都使用1像素步长，同时对输入做相应的padding操作以保持经过卷积后的输出图像空间分辨率(图像长/宽)不变，比如对于3x3的卷积层就要在图像四周做1像素的padding。空间池化包含5个最大池化层，这些池化层在某一些卷积层后(而不是所有)。最大池化采用步长为2的2x2大小窗口。</p>
 <p>卷积层栈之后有3个全连接(FC)层：前两层各有4096个通道，第三层用于做1000类的ILSVRC分类因而有1000个通道。最后一层是softmax层。全连接层的设置在作者的所有网络中都相同。</p>
 <p>所有的隐藏层都进行ReLU操作。同时我们所有网络中只有一个使用了LRN（LRN参数和ALexNet中相同），因为作者发现LRN并不会提高在ILSVRC上的准确度但会增加内存消耗和计算时间。</p>
-<h2 id="2-2__u914D_u7F6E"><a href="#2-2__u914D_u7F6E" class="headerlink" title="2.2 配置"></a>2.2 配置</h2><p>这篇文章所评估的卷积网络配置如下：<br><img src="/2017/04/18/paper-notes-vggnet/nets.png" alt="nets.png" title=""><br>所有的网络都采用2.1中描述的设计，它们之间只有深度上的差异。卷积层的通道数从64开始每次经过最大池化层后x2直到512.</p>
+<h2 id="2-2-配置"><a href="#2-2-配置" class="headerlink" title="2.2 配置"></a>2.2 配置</h2><p>这篇文章所评估的卷积网络配置如下：<br><img src="/2017/04/18/paper-notes-vggnet/nets.png" alt="nets.png" title=""><br>所有的网络都采用2.1中描述的设计，它们之间只有深度上的差异。卷积层的通道数从64开始每次经过最大池化层后x2直到512.</p>
 <p>各网络的参数数量如下：<br><img src="/2017/04/18/paper-notes-vggnet/params.png" alt="params.png" title=""><br>尽管网络很深，但是权重的数量并不比一个网络更浅但是卷积核尺寸更大的模型多。</p>
-<h2 id="2-3__u8BA8_u8BBA"><a href="#2-3__u8BA8_u8BBA" class="headerlink" title="2.3 讨论"></a>2.3 讨论</h2><p>VGG使用了更小的(3x3，步长为1)的卷积核，不同于前两年的ILSVRC的优胜者(2012-AlexNet: 11x11步长4, <a href="https://arxiv.org/abs/1311.2901" target="_blank" rel="external">2013; 2013-ZFNet</a>: 7x7步长2)。显然，两个连续3x3卷积相当于一个5x5的卷积，而三个3x3的卷积则相当于7x7的卷积.</p>
+<h2 id="2-3-讨论"><a href="#2-3-讨论" class="headerlink" title="2.3 讨论"></a>2.3 讨论</h2><p>VGG使用了更小的(3x3，步长为1)的卷积核，不同于前两年的ILSVRC的优胜者(2012-AlexNet: 11x11步长4, <a href="https://arxiv.org/abs/1311.2901" target="_blank" rel="external">2013; 2013-ZFNet</a>: 7x7步长2)。显然，两个连续3x3卷积相当于一个5x5的卷积，而三个3x3的卷积则相当于7x7的卷积.</p>
 <p>使用3x3小卷积的好处有两个，以用3个3x3卷积替代一个7x7卷积为例：</p>
 <ol>
 <li>3个卷积层就可以做3次ReLU等非线性操作而不是1次，这使模型Capacity增加了。</li>
@@ -330,18 +332,18 @@
 </ol>
 <p>另外作者还考虑到了1×1的卷积，尽管(输出和输出的通道数量相同的)1x1卷积层本质上相当于到相同维度空间的一个线性投影，但是激活函数使整个模型非线性增加。1×1卷积层最近(2014)被使用在的<a href="https://arxiv.org/abs/1312.4400" target="_blank" rel="external">Network in Network</a>结构中。</p>
 <p>小尺寸的卷积滤之前在<a href="https://www.researchgate.net/publication/220812758_Flexible_High_Performance_Convolutional_Neural_Networks_for_Image_Classification" target="_blank" rel="external">Flexible, High Performance Convolutional Neural Networks for Image Classification(2011)</a>中使用过，但是他们的网络远没有VGGNet的深。</p>
-<h1 id="3__u5206_u7C7B_u6846_u67B6"><a href="#3__u5206_u7C7B_u6846_u67B6" class="headerlink" title="3 分类框架"></a>3 分类框架</h1><h2 id="3-1__u8BAD_u7EC3"><a href="#3-1__u8BAD_u7EC3" class="headerlink" title="3.1 训练"></a>3.1 训练</h2><p>VGGNet使用的训练方法基本延续AlexNet的方法（除了从多尺度图像中裁切，后文会有解释）：<br>使用带有动量(momentum=0.9)的mini-batch(batch_size=256)梯度下降法(基于反向传播, <a href="http://yann.lecun.org/exdb/publis/pdf/lecun-89e.pdf" target="_blank" rel="external">LeCun et al, 1989</a>)来优化多项式回归(the multinomial logistic regression)。通过权值衰减(L2惩罚系数设置为5*10^−4)以及对前两个全连接层执行dropout(dropout=0.5)来对训练进行正则化。初始学习率设置为10^−2，当验证集准确率稳定时将学习率除以10。学习率总共降低了3次，训练一共进行了370K次迭代(74个epoch)。相比AlexNet约90epochs有所减少，由于：1) 更深的深度和更小的卷积滤波器尺寸隐式的增强了正则化；2) 某些层执行了预初始化(pre-initialisation)。</p>
+<h1 id="3-分类框架"><a href="#3-分类框架" class="headerlink" title="3 分类框架"></a>3 分类框架</h1><h2 id="3-1-训练"><a href="#3-1-训练" class="headerlink" title="3.1 训练"></a>3.1 训练</h2><p>VGGNet使用的训练方法基本延续AlexNet的方法（除了从多尺度图像中裁切，后文会有解释）：<br>使用带有动量(momentum=0.9)的mini-batch(batch_size=256)梯度下降法(基于反向传播, <a href="http://yann.lecun.org/exdb/publis/pdf/lecun-89e.pdf" target="_blank" rel="external">LeCun et al, 1989</a>)来优化多项式回归(the multinomial logistic regression)。通过权值衰减(L2惩罚系数设置为5*10^−4)以及对前两个全连接层执行dropout(dropout=0.5)来对训练进行正则化。初始学习率设置为10^−2，当验证集准确率稳定时将学习率除以10。学习率总共降低了3次，训练一共进行了370K次迭代(74个epoch)。相比AlexNet约90epochs有所减少，由于：1) 更深的深度和更小的卷积滤波器尺寸隐式的增强了正则化；2) 某些层执行了预初始化(pre-initialisation)。</p>
 <p>网络权重的初始化是非常重要的，由于深度网络梯度的不稳定性，不合适的初始化将会阻碍网络的学习。为了避免这个问题，我们先在网络A上使用随机初始化进行训练。然后在训练更深的网络时，我们使用网络A来初始化前四个卷积层和最后三个全连接层(中间层使用随机初始化)。同时作者并没有降低预初始化层的学习率。采用随机初始化的层则从均值0方差0.01的正态分布中对权重进行采样，bias初始化为0。作者在文章提交后发现可以使用<a href="http://proceedings.mlr.press/v9/glorot10a.html" target="_blank" rel="external">Understanding the difficulty of training deep feedforward neural networks</a>中的随机初始化程序来对权重进初始化而不需要进行预训练。</p>
-<h3 id="u8BAD_u7EC3_u56FE_u50CF_u5927_u5C0F"><a href="#u8BAD_u7EC3_u56FE_u50CF_u5927_u5C0F" class="headerlink" title="训练图像大小"></a>训练图像大小</h3><p>作者在模型训练时，使用了Multi-scale的训练：把原始图像缩放到最小边S不小于224，然后在整幅图像上提取224*224片段来进行训练。两种方案：<br>方案1：所有图像上固定S，分别设置S=256，和S=384，然后进行裁切来训练两个模型，使用两种模型来评估。<br>方案2：对于每一幅图像，在[Smin,Smax]中随机选取一个S，然后在进行裁切来训练模型，这种训练方式相当于使用了尺寸抖动（scale jittering）的数据增强，可以使用一个单一的模型来对多尺寸图像进行识别。</p>
-<h2 id="3-2__u6D4B_u8BD5"><a href="#3-2__u6D4B_u8BD5" class="headerlink" title="3.2 测试"></a>3.2 测试</h2><p>测试阶段，图像缩放到一个尺寸Q（Q与训练尺寸S并不一定要相同）。然后根据<a href="https://arxiv.org/abs/1312.6229" target="_blank" rel="external">OverFeat</a>中方法，将网络转换为全卷积网络(FCN):第一个全连接层转换成7×7的卷积层，后两个全连接层转换成1×1的卷积层。再将此网络上计算缩放后但未经裁切的图片的分类得分，计算原始图像和翻转图像上得分平均值作为最终得分。[这部分可以参考: <a href="http://www.jianshu.com/p/6d441e208547" target="_blank" rel="external">http://www.jianshu.com/p/6d441e208547</a>]</p>
+<h3 id="训练图像大小"><a href="#训练图像大小" class="headerlink" title="训练图像大小"></a>训练图像大小</h3><p>作者在模型训练时，使用了Multi-scale的训练：把原始图像缩放到最小边S不小于224，然后在整幅图像上提取224*224片段来进行训练。两种方案：<br>方案1：所有图像上固定S，分别设置S=256，和S=384，然后进行裁切来训练两个模型，使用两种模型来评估。<br>方案2：对于每一幅图像，在[Smin,Smax]中随机选取一个S，然后在进行裁切来训练模型，这种训练方式相当于使用了尺寸抖动（scale jittering）的数据增强，可以使用一个单一的模型来对多尺寸图像进行识别。</p>
+<h2 id="3-2-测试"><a href="#3-2-测试" class="headerlink" title="3.2 测试"></a>3.2 测试</h2><p>测试阶段，图像缩放到一个尺寸Q（Q与训练尺寸S并不一定要相同）。然后根据<a href="https://arxiv.org/abs/1312.6229" target="_blank" rel="external">OverFeat</a>中方法，将网络转换为全卷积网络(FCN):第一个全连接层转换成7×7的卷积层，后两个全连接层转换成1×1的卷积层。再将此网络上计算缩放后但未经裁切的图片的分类得分，计算原始图像和翻转图像上得分平均值作为最终得分。[这部分可以参考: <a href="http://www.jianshu.com/p/6d441e208547" target="_blank" rel="external">http://www.jianshu.com/p/6d441e208547</a>]</p>
 <p>作者还发现在测试时使用多种尺寸缩放图像并进行裁剪再结合上述方法可以进一步提高准确率，并给出了实验结果(4.3)。</p>
-<h2 id="3-3__u5B9E_u73B0_u7EC6_u8282"><a href="#3-3__u5B9E_u73B0_u7EC6_u8282" class="headerlink" title="3.3 实现细节"></a>3.3 实现细节</h2><p>VGGNet基于Caffe实现但对其进行了修改，以满足多GPU训练和评估的需要。</p>
+<h2 id="3-3-实现细节"><a href="#3-3-实现细节" class="headerlink" title="3.3 实现细节"></a>3.3 实现细节</h2><p>VGGNet基于Caffe实现但对其进行了修改，以满足多GPU训练和评估的需要。</p>
 <p>训练时，将每批数据分给多个GPU并行计算，最后计算所有GPU的梯度平均值作为最后此批数据总梯度。因为梯度计算在GPU间同步所以多GPU训练和单GPU训练结果相同。</p>
 <p>训练时间：4块NVIDIA Titan Black(是单卡的3.75倍)训练2-3周</p>
-<h1 id="4__u5206_u7C7B_u5B9E_u9A8C"><a href="#4__u5206_u7C7B_u5B9E_u9A8C" class="headerlink" title="4 分类实验"></a>4 分类实验</h1><h2 id="4-1__u5355_u4E00_u5C3A_u5BF8_28SINGLE_SCALE_EVALUATION_29"><a href="#4-1__u5355_u4E00_u5C3A_u5BF8_28SINGLE_SCALE_EVALUATION_29" class="headerlink" title="4.1 单一尺寸(SINGLE SCALE EVALUATION)"></a>4.1 单一尺寸(SINGLE SCALE EVALUATION)</h2><img src="/2017/04/18/paper-notes-vggnet/single-scale.png" alt="single-scale.png" title="">
-<h2 id="4-2__u591A_u5C3A_u5BF8_28MULTI-SCALE_EVALUATION_29"><a href="#4-2__u591A_u5C3A_u5BF8_28MULTI-SCALE_EVALUATION_29" class="headerlink" title="4.2 多尺寸(MULTI-SCALE EVALUATION)"></a>4.2 多尺寸(MULTI-SCALE EVALUATION)</h2><img src="/2017/04/18/paper-notes-vggnet/multi-scale.png" alt="multi-scale.png" title="">
-<h2 id="4-3__u591A_u5C3A_u5BF8+_u88C1_u526A_28MULTI-CROP_EVALUATION_29"><a href="#4-3__u591A_u5C3A_u5BF8+_u88C1_u526A_28MULTI-CROP_EVALUATION_29" class="headerlink" title="4.3 多尺寸+裁剪(MULTI-CROP EVALUATION)"></a>4.3 多尺寸+裁剪(MULTI-CROP EVALUATION)</h2><img src="/2017/04/18/paper-notes-vggnet/multi-crop.png" alt="multi-crop.png" title="">
-<h2 id="4-4__u591A_u5377_u79EF_u7F51_u7EDC_u878D_u5408"><a href="#4-4__u591A_u5377_u79EF_u7F51_u7EDC_u878D_u5408" class="headerlink" title="4.4 多卷积网络融合"></a>4.4 多卷积网络融合</h2><img src="/2017/04/18/paper-notes-vggnet/net-fusion.png" alt="net-fusion.png" title="">
+<h1 id="4-分类实验"><a href="#4-分类实验" class="headerlink" title="4 分类实验"></a>4 分类实验</h1><h2 id="4-1-单一尺寸-SINGLE-SCALE-EVALUATION"><a href="#4-1-单一尺寸-SINGLE-SCALE-EVALUATION" class="headerlink" title="4.1 单一尺寸(SINGLE SCALE EVALUATION)"></a>4.1 单一尺寸(SINGLE SCALE EVALUATION)</h2><img src="/2017/04/18/paper-notes-vggnet/single-scale.png" alt="single-scale.png" title="">
+<h2 id="4-2-多尺寸-MULTI-SCALE-EVALUATION"><a href="#4-2-多尺寸-MULTI-SCALE-EVALUATION" class="headerlink" title="4.2 多尺寸(MULTI-SCALE EVALUATION)"></a>4.2 多尺寸(MULTI-SCALE EVALUATION)</h2><img src="/2017/04/18/paper-notes-vggnet/multi-scale.png" alt="multi-scale.png" title="">
+<h2 id="4-3-多尺寸-裁剪-MULTI-CROP-EVALUATION"><a href="#4-3-多尺寸-裁剪-MULTI-CROP-EVALUATION" class="headerlink" title="4.3 多尺寸+裁剪(MULTI-CROP EVALUATION)"></a>4.3 多尺寸+裁剪(MULTI-CROP EVALUATION)</h2><img src="/2017/04/18/paper-notes-vggnet/multi-crop.png" alt="multi-crop.png" title="">
+<h2 id="4-4-多卷积网络融合"><a href="#4-4-多卷积网络融合" class="headerlink" title="4.4 多卷积网络融合"></a>4.4 多卷积网络融合</h2><img src="/2017/04/18/paper-notes-vggnet/net-fusion.png" alt="net-fusion.png" title="">
 
       
     </div>
@@ -375,16 +377,16 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/04/17/paper-notes-alexnet/" rel="next" title="ImageNet Classification with Deep ConvolutionalNeural Networks - 论文笔记">
-                <i class="fa fa-chevron-left"></i> ImageNet Classification with Deep ConvolutionalNeural Networks - 论文笔记
+              <a href="/2017/04/20/paper-notes-inceptionv1/" rel="next" title="Going deeper with convolutions - 论文笔记">
+                <i class="fa fa-chevron-left"></i> Going deeper with convolutions - 论文笔记
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2017/04/20/paper-notes-inceptionv1/" rel="prev" title="Going deeper with convolutions - 论文笔记">
-                Going deeper with convolutions - 论文笔记 <i class="fa fa-chevron-right"></i>
+              <a href="/2017/04/17/paper-notes-alexnet/" rel="prev" title="ImageNet Classification with Deep ConvolutionalNeural Networks - 论文笔记">
+                ImageNet Classification with Deep ConvolutionalNeural Networks - 论文笔记 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -476,7 +478,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">11</span>
+              <span class="site-state-item-count">12</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -486,7 +488,7 @@
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">11</span>
+                <span class="site-state-item-count">12</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
@@ -515,7 +517,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1__u4ECB_u7ECD"><span class="nav-number">1.</span> <span class="nav-text">1 介绍</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2__u5377_u79EF_u7F51_u7EDC_u8BBE_u7F6E"><span class="nav-number">2.</span> <span class="nav-text">2 卷积网络设置</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1__u7ED3_u6784"><span class="nav-number">2.1.</span> <span class="nav-text">2.1 结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2__u914D_u7F6E"><span class="nav-number">2.2.</span> <span class="nav-text">2.2 配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-3__u8BA8_u8BBA"><span class="nav-number">2.3.</span> <span class="nav-text">2.3 讨论</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3__u5206_u7C7B_u6846_u67B6"><span class="nav-number">3.</span> <span class="nav-text">3 分类框架</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#3-1__u8BAD_u7EC3"><span class="nav-number">3.1.</span> <span class="nav-text">3.1 训练</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#u8BAD_u7EC3_u56FE_u50CF_u5927_u5C0F"><span class="nav-number">3.1.1.</span> <span class="nav-text">训练图像大小</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-2__u6D4B_u8BD5"><span class="nav-number">3.2.</span> <span class="nav-text">3.2 测试</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-3__u5B9E_u73B0_u7EC6_u8282"><span class="nav-number">3.3.</span> <span class="nav-text">3.3 实现细节</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4__u5206_u7C7B_u5B9E_u9A8C"><span class="nav-number">4.</span> <span class="nav-text">4 分类实验</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#4-1__u5355_u4E00_u5C3A_u5BF8_28SINGLE_SCALE_EVALUATION_29"><span class="nav-number">4.1.</span> <span class="nav-text">4.1 单一尺寸(SINGLE SCALE EVALUATION)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-2__u591A_u5C3A_u5BF8_28MULTI-SCALE_EVALUATION_29"><span class="nav-number">4.2.</span> <span class="nav-text">4.2 多尺寸(MULTI-SCALE EVALUATION)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-3__u591A_u5C3A_u5BF8+_u88C1_u526A_28MULTI-CROP_EVALUATION_29"><span class="nav-number">4.3.</span> <span class="nav-text">4.3 多尺寸+裁剪(MULTI-CROP EVALUATION)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-4__u591A_u5377_u79EF_u7F51_u7EDC_u878D_u5408"><span class="nav-number">4.4.</span> <span class="nav-text">4.4 多卷积网络融合</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-介绍"><span class="nav-number">1.</span> <span class="nav-text">1 介绍</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-卷积网络设置"><span class="nav-number">2.</span> <span class="nav-text">2 卷积网络设置</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1-结构"><span class="nav-number">2.1.</span> <span class="nav-text">2.1 结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2-配置"><span class="nav-number">2.2.</span> <span class="nav-text">2.2 配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-3-讨论"><span class="nav-number">2.3.</span> <span class="nav-text">2.3 讨论</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-分类框架"><span class="nav-number">3.</span> <span class="nav-text">3 分类框架</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#3-1-训练"><span class="nav-number">3.1.</span> <span class="nav-text">3.1 训练</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#训练图像大小"><span class="nav-number">3.1.1.</span> <span class="nav-text">训练图像大小</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-2-测试"><span class="nav-number">3.2.</span> <span class="nav-text">3.2 测试</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-3-实现细节"><span class="nav-number">3.3.</span> <span class="nav-text">3.3 实现细节</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-分类实验"><span class="nav-number">4.</span> <span class="nav-text">4 分类实验</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#4-1-单一尺寸-SINGLE-SCALE-EVALUATION"><span class="nav-number">4.1.</span> <span class="nav-text">4.1 单一尺寸(SINGLE SCALE EVALUATION)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-2-多尺寸-MULTI-SCALE-EVALUATION"><span class="nav-number">4.2.</span> <span class="nav-text">4.2 多尺寸(MULTI-SCALE EVALUATION)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-3-多尺寸-裁剪-MULTI-CROP-EVALUATION"><span class="nav-number">4.3.</span> <span class="nav-text">4.3 多尺寸+裁剪(MULTI-CROP EVALUATION)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-4-多卷积网络融合"><span class="nav-number">4.4.</span> <span class="nav-text">4.4 多卷积网络融合</span></a></li></ol></li></ol></div>
             
           </div>
         </section>

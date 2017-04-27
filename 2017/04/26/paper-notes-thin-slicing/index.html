@@ -68,7 +68,7 @@
 <link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="DeepLearning,PaperNotes," />
+  <meta name="keywords" content="DeepLearning,PaperNotes,CVPR16," />
 
 
 
@@ -84,23 +84,22 @@
 
 
 
-<meta name="description" content="原文地址:Deep Residual Learning for Image RecognitionResNet采用了深度残差学习的方法将网络深度大大加深，在实现过程中作者使用了诸如恒等映射等先验知识很值得参考。">
-<meta name="keywords" content="DeepLearning,PaperNotes">
+<meta name="description" content="这篇文章主要使用了DCNN构造了一个嵌入函数(embedding function)，能够感受姿态并将相似姿态的人投影到嵌入空间邻近区域中。作者说其结构能有效剔除服装、背景、和成像因素以学习鲁棒的人体姿态特征。对于各种姿态相关任务，这种方法计算高效并且不需要明确的估计姿势，绕过了定位关节的问题。作者还给出采用此方法的图像检索和姿态识别的例子。">
+<meta name="keywords" content="DeepLearning,PaperNotes,CVPR16">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Deep Residual Learning for Image Recognition - 论文笔记">
-<meta property="og:url" content="http://wentaoma.com/2017/04/23/paper-notes-resnet/index.html">
+<meta property="og:title" content="Thin-Slicing for Pose - Learning to Understand Pose without Explicit Pose Estimation - 论文笔记">
+<meta property="og:url" content="http://wentaoma.com/2017/04/26/paper-notes-thin-slicing/index.html">
 <meta property="og:site_name" content="Wentao">
-<meta property="og:description" content="原文地址:Deep Residual Learning for Image RecognitionResNet采用了深度残差学习的方法将网络深度大大加深，在实现过程中作者使用了诸如恒等映射等先验知识很值得参考。">
-<meta property="og:image" content="http://wentaoma.com/2017/04/23/paper-notes-resnet/figure1.jpg">
-<meta property="og:image" content="http://wentaoma.com/2017/04/23/paper-notes-resnet/building-block.jpg">
-<meta property="og:image" content="http://wentaoma.com/2017/04/23/paper-notes-resnet/bottleneck.png">
-<meta property="og:image" content="http://wentaoma.com/2017/04/23/paper-notes-resnet/arch.png">
-<meta property="og:image" content="http://wentaoma.com/2017/04/23/paper-notes-resnet/test.png">
-<meta property="og:updated_time" content="2017-04-23T08:12:02.870Z">
+<meta property="og:description" content="这篇文章主要使用了DCNN构造了一个嵌入函数(embedding function)，能够感受姿态并将相似姿态的人投影到嵌入空间邻近区域中。作者说其结构能有效剔除服装、背景、和成像因素以学习鲁棒的人体姿态特征。对于各种姿态相关任务，这种方法计算高效并且不需要明确的估计姿势，绕过了定位关节的问题。作者还给出采用此方法的图像检索和姿态识别的例子。">
+<meta property="og:image" content="http://wentaoma.com/2017/04/26/paper-notes-thin-slicing/net.jpg">
+<meta property="og:image" content="http://wentaoma.com/2017/04/26/paper-notes-thin-slicing/loss.jpg">
+<meta property="og:image" content="http://wentaoma.com/2017/04/26/paper-notes-thin-slicing/mpii.jpg">
+<meta property="og:image" content="http://wentaoma.com/2017/04/26/paper-notes-thin-slicing/voc2012.jpg">
+<meta property="og:updated_time" content="2017-04-27T02:17:06.653Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Deep Residual Learning for Image Recognition - 论文笔记">
-<meta name="twitter:description" content="原文地址:Deep Residual Learning for Image RecognitionResNet采用了深度残差学习的方法将网络深度大大加深，在实现过程中作者使用了诸如恒等映射等先验知识很值得参考。">
-<meta name="twitter:image" content="http://wentaoma.com/2017/04/23/paper-notes-resnet/figure1.jpg">
+<meta name="twitter:title" content="Thin-Slicing for Pose - Learning to Understand Pose without Explicit Pose Estimation - 论文笔记">
+<meta name="twitter:description" content="这篇文章主要使用了DCNN构造了一个嵌入函数(embedding function)，能够感受姿态并将相似姿态的人投影到嵌入空间邻近区域中。作者说其结构能有效剔除服装、背景、和成像因素以学习鲁棒的人体姿态特征。对于各种姿态相关任务，这种方法计算高效并且不需要明确的估计姿势，绕过了定位关节的问题。作者还给出采用此方法的图像检索和姿态识别的例子。">
+<meta name="twitter:image" content="http://wentaoma.com/2017/04/26/paper-notes-thin-slicing/net.jpg">
 
 
 
@@ -121,9 +120,9 @@
 
 
 
-  <link rel="canonical" href="http://wentaoma.com/2017/04/23/paper-notes-resnet/"/>
+  <link rel="canonical" href="http://wentaoma.com/2017/04/26/paper-notes-thin-slicing/"/>
 
-  <title> Deep Residual Learning for Image Recognition - 论文笔记 | Wentao </title>
+  <title> Thin-Slicing for Pose - Learning to Understand Pose without Explicit Pose Estimation - 论文笔记 | Wentao </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -266,7 +265,7 @@
             
             
               
-                Deep Residual Learning for Image Recognition - 论文笔记
+                Thin-Slicing for Pose - Learning to Understand Pose without Explicit Pose Estimation - 论文笔记
               
             
           </h1>
@@ -278,8 +277,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2017-04-23T10:12:22+08:00" content="2017-04-23">
-              2017-04-23
+            <time itemprop="dateCreated" datetime="2017-04-26T20:54:44+08:00" content="2017-04-26">
+              2017-04-26
             </time>
           </span>
 
@@ -289,8 +288,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2017/04/23/paper-notes-resnet/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/04/23/paper-notes-resnet/" itemprop="commentsCount"></span>
+                <a href="/2017/04/26/paper-notes-thin-slicing/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/04/26/paper-notes-thin-slicing/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -313,32 +312,38 @@
       
 
       
-        <p>原文地址:<a href="https://arxiv.org/abs/1512.03385" target="_blank" rel="external">Deep Residual Learning for Image Recognition</a><br>ResNet采用了深度残差学习的方法将网络深度大大加深，在实现过程中作者使用了诸如恒等映射等先验知识很值得参考。<br><a id="more"></a></p>
-<h1 id="论文背景"><a href="#论文背景" class="headerlink" title="论文背景"></a>论文背景</h1><p>深度卷积神经网络在图像分类领域带来了一系列突破。深度网络可以很自然的将低/中/高层特征和分类器整合进一个端到端(end to end)的多层模型中，而特征的“级别”(“levels”)可以通过堆叠层的数量（深度）来丰富。最近结果显示，模型的深度发挥着至关重要的作用，这样导致了ImageNet竞赛的参赛模型都趋向于“非常深”——16 层 到30层 。许多其它的视觉识别任务的也都得益于非常深的模型。</p>
-<p>在深度的重要性的驱使下，出现了一个新的问题：训练一个更好的网络是否就像堆叠更多的层一样简单呢？解决这一问题的障碍之一便是困扰人们很久的梯度消失/梯度爆炸，这从一开始便阻碍了模型的收敛。归一初始化（normalized initialization）和中间归一化（intermediate normalization）在很大程度上解决了这一问题，它使得采用SGD反向传播算法的数十层的网络能够开始收敛。</p>
-<p>当深层网络可以开始收敛时，又出现了另一个问题——退化(degradation)：随着网络深度的增加，准确率增加到一定程度后反而开始迅速衰减。然而，这种现象并不是由过拟合造成的：因为在一个适当的模型中增加更多的层却导致了如下图所示的更高的错误率:<br><img src="/2017/04/23/paper-notes-resnet/figure1.jpg" alt="figure1.jpg" title=""></p>
-<p>退化的出现表明了并非所有的系统都是容易优化的。因此作者提出了深度残差学习来解决退化问题：</p>
-<h1 id="到底什么是深度残差学习"><a href="#到底什么是深度残差学习" class="headerlink" title="到底什么是深度残差学习"></a>到底什么是深度残差学习</h1><p>首先考虑这样一种情况：<br>对于一个深层版本网络，如果只使用恒等映射(identity mapping来构建新增加的层，其它的层由浅层版本中直接复制而来——即让新增加的层表达式为f(x)=x 。这时候将浅层网络视为映射H(x)，当深层网络新增加的层都为恒等映射f(x’)=x’时：新增加的层接受底层输入为x’=H(x)，因此深层网络最后输出应为 f(H(x))=H(x) 和浅层网络一样。<br>在这种情况下，一个更深的模型不应当产生比它的浅层版本更高的训练错误率。</p>
-<p>那么之前的退化现象又是怎么回事？这可能是因为增加的多个非线性层很难来估计出一个恒等映射。</p>
-<p>为了解决这一点，作者基于<strong>增加层如果为恒等映射那么更深层网络不应该比浅层网络产生更高错误率</strong>的思想，提出了深度残差学习：</p>
-<p>即使用如下图所示的模块来增加网络深度：<br><img src="/2017/04/23/paper-notes-resnet/building-block.jpg" alt="building-block.jpg" title=""><br>这个模块直接通过shorcut connections方式为增加层引入了一个恒等映射，让原来的卷积层去学习拟合另一个映射F(x)</p>
-<p>如果我们将浅层网络视作映射H(x)，深层网络视作H’(x)的话，那么由于增加的层直接引入了恒等映射，所以H’(x)=H(x)+F(x)</p>
-<p>极端情况下，即恒等映射是增加层的最优解，那么直接将F(x)置为0（卷积层权重、偏差为0）即可，远比使用多个非线性层来拟合恒等映射简单。</p>
-<p>作者将这样一个F(x)称之为残差映射(residual mapping)。参考极端情况下的例子，作者推断残差映射比原始未参考的映射(unreferenced mapping)更容易优化。</p>
-<p>同时出于计算量的考量，作者在之前结构上修改提出了bottleneck的结构：<br><img src="/2017/04/23/paper-notes-resnet/bottleneck.png" alt="bottleneck.png" title=""></p>
-<p>这种构造网络的方式即称为深度残差学习。</p>
-<h1 id="网络结构"><a href="#网络结构" class="headerlink" title="网络结构"></a>网络结构</h1><p>整体参考VGGNet，<br>卷积层主要为3*3的滤波器，并且遵循：输出特征尺寸相同的层含有相同数量的滤波器；如果特征尺寸减半，则滤波器的数量增加一倍来保证每层的时间复杂度相同。<br>直接通过stride为2的卷积层来进行下采样。<br>分类使用使用全局平均池化和一个1000类的全连接层代替VGG的三个全连接层。</p>
-<img src="/2017/04/23/paper-notes-resnet/arch.png" alt="arch.png" title="">
-<p>在上图每个用大括号的卷积层都使用shorcut连接。</p>
-<p>模型构建好后进行实验，在plain上观测到明显的退化现象，而且ResNet上不仅没有退化，34层网络的效果反而比18层的更好，而且不仅如此，同等层数下ResNet的收敛速度比plain的要快得多。<br><img src="/2017/04/23/paper-notes-resnet/test.png" alt="test.png" title=""></p>
-<p>对于shortcut的方式，作者提出了三个选项：<br>A. 使用恒等映射，如果residual block的输入输出维度不一致，对增加的维度用0来填充；<br>B. 在block输入输出维度一致时使用恒等映射，不一致时使用线性投影以保证维度一致；<br>C. 对于所有的block均使用线性投影。<br>对这三个选项都进行了实验，发现虽然C的效果好于B的效果好于A的效果，但是差距很小，因此线性投影并不是必需的，而使用0填充时，可以保证模型的复杂度最低，这对于更深的网络是更加有利的。</p>
-<h1 id="实现细节"><a href="#实现细节" class="headerlink" title="实现细节"></a>实现细节</h1><p>数据扩增：</p>
-<ol>
-<li>调整图像的大小使它的短边长度随机的从[256,480]中采样来增加图像尺度。</li>
-<li>从一张图像或者它的水平翻转图像中随机采样一个224*224的crop，每个像素都减去均值。图像使用标准的颜色增强</li>
+        <p>这篇文章主要使用了DCNN构造了一个嵌入函数(embedding function)，能够感受姿态并将相似姿态的人投影到嵌入空间邻近区域中。作者说其结构能有效剔除服装、背景、和成像因素以学习鲁棒的人体姿态特征。对于各种姿态相关任务，这种方法计算高效并且不需要明确的估计姿势，绕过了定位关节的问题。作者还给出采用此方法的图像检索和姿态识别的例子。<br><a id="more"></a></p>
+<h1 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h1><blockquote>
+<p>There can be as much value in the blink of an eye as in months of rational analysis.<br><em>眨眼间的判断和数月的理性分析具有同样的价值。</em><br>— Malcolm Gladwell</p>
+</blockquote>
+<p>这个句子出自Malcolm Gladwell的《Blink》，书中举了一些例子来说明人们存在一种不自觉的瞬间判断(snap judgment)与快速认知(rapid cognition)的能力称之为「薄片分析」 (thin-slicing)。</p>
+<p>这篇文章就是让机器使用thin-slicing来分析人体姿态并减少对精确人体姿态估计的需求。人体姿态估计的问题主要在于定位独立的身体关节。即使全身可见，经常性的自我遮挡和姿势差异是这个问题很难解决。同时还由于复杂的结构推导问题，人体姿态估计在实践中计算繁重。</p>
+<p>作者认为很多问题都只需要估计姿势相似度因此准确的人体姿势估计可能并不是必须的。因此改为基于CNN训练一个有效的姿态嵌入函数。</p>
+<p>关于嵌入(embedding)是一个数学上的概念：<br>Embedding在数学上表示一个maping, f: X -&gt; Y， 也就是一个function，其中f是单射函数，而且有structure-preserving (结构保存，比如在X所属的空间上X1 &lt; X2,那么映射后在Y所属空间上同理 Y1 &lt; Y2，具体保存什么结构要看问题来定)的特性。</p>
+<h1 id="相关工作"><a href="#相关工作" class="headerlink" title="相关工作"></a>相关工作</h1><p><strong>Pose estimation</strong><br><strong>Action recognition with pose</strong><br><strong>Embedding by similarity</strong><br><strong>Pose embedding</strong></p>
+<h1 id="算法概览"><a href="#算法概览" class="headerlink" title="算法概览"></a>算法概览</h1><p>论文在训练CNN时，使用了Triplet Rank Loss：</p>
+<p>论文对full-body和upper-body的姿态分别训练了两个嵌入函数，两个使用同样网络结构。</p>
+<h2 id="网络结构"><a href="#网络结构" class="headerlink" title="网络结构"></a>网络结构</h2><img src="/2017/04/26/paper-notes-thin-slicing/net.jpg" alt="net.jpg" title="">
+<p>图片中蓝色卷积层使用VGG-S的预训练权值并在训练时微调, 来源于这篇论文：Return of the Devil in the Details: Delving Deep into Convolutional Nets</p>
+<h2 id="Triplet-rank-loss"><a href="#Triplet-rank-loss" class="headerlink" title="Triplet rank loss"></a>Triplet rank loss</h2><p>Triplet loss即使用3个样本计算loss： Anchor,Positive(和Anchor属于同一类)和Negative(和Anchor属于不同类)；由3个样本经过网络得到3个特征表达f(a),f(p),f(n)。其优化目标是让f(a)和f(p)距离L(a,p)尽可能小，f(a)和f(n)距离L(a,n)尽可能大，且这两个距离之间至少相差α。最后Loss取L(a,p)-L(a,n)+α的正值，负值0.<br>关于Triplet Loss的详细内容参见<a href="http://blog.csdn.net/tangwei2014/article/details/46788025" target="_blank" rel="external">Triplet loss 原理以及梯度推导</a></p>
+<p>论文中Loss方程如下:<br><img src="/2017/04/26/paper-notes-thin-slicing/loss.jpg" alt="loss.jpg" title=""></p>
+<h1 id="数据集"><a href="#数据集" class="headerlink" title="数据集"></a>数据集</h1><h2 id="数据源"><a href="#数据源" class="headerlink" title="数据源"></a>数据源</h2><p>作者收集了有关节标记的姿态图片，并根据标记关节坐标计算姿态间距，主要基于 MPII Human Pose dataset，H3D 和 VOC2009 person (trainval) 做补充。</p>
+<p>最后数据集大小为：<br>12,366 images for training (MPII: 10,000, H3D: 843, VOC2009 people: 1,523)<br>9,919 images for validation (MPII: 9,919)</p>
+<h2 id="图像和姿态标准化"><a href="#图像和姿态标准化" class="headerlink" title="图像和姿态标准化"></a>图像和姿态标准化</h2><p>全身：使用共同的姿势中心点对齐图像(如骨盆)，裁剪出最小包含整个人体框的的正方形<br>上身：以头部为宽度中心点，按比例裁剪正方形</p>
+<p>两个图像姿态距离定义为：两个图像对应关节坐标欧氏距离均值</p>
+<h1 id="Learning-pose-embedding-network"><a href="#Learning-pose-embedding-network" class="headerlink" title="Learning pose embedding network"></a>Learning pose embedding network</h1><h2 id="Triplet-sampling"><a href="#Triplet-sampling" class="headerlink" title="Triplet sampling"></a>Triplet sampling</h2><p>数万张图像之间的3元组配对数量太多，因此：<br>对每个图像x，选择p个最邻近的图像作为Positive样本的集合P，其余图像作为Negative样本集合N；在每个epoch后移除Negative集合中最远的一些样本。</p>
+<h2 id="Learning-network-with-random-triplets"><a href="#Learning-network-with-random-triplets" class="headerlink" title="Learning network with random triplets"></a>Learning network with random triplets</h2><p>为了更有效的求解triplet rank loss,在一个mini-batch中先算出anchor和每个negative、positive之间的距离，这样每个图像只需前向传播一次。同时由于每个图像可能参与到多个triplet中，因此将每个的梯度累加最后执行一次反向传播。</p>
+<h1 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h1><p>作者在MPII上测试了图像检索表现，VOC2012 Action dataset及PPMI上测试了动作识别的表现。</p>
+<h2 id="实现细节"><a href="#实现细节" class="headerlink" title="实现细节"></a>实现细节</h2><p>对于全身姿态嵌入，sampling中p取30，上身的p取15.<br>mini-batch大小设置为128：1个anchor，5个随机positive，122个随机negative。Negative样本集合N大小每epoch减小3K直至减小到1K。每个batch中图像单独变化和拉伸±10%，对于整个batch以0.5的概率随机翻转。<br>FC layer学习率初始为0.01，每epoch乘0.2，卷积层学习率是FC的1/10。 momentum和weight decay设为0.9和0.0005.</p>
+<h2 id="实验结果"><a href="#实验结果" class="headerlink" title="实验结果"></a>实验结果</h2><ol>
+<li><p>在图像搜索上性能比对比的几个模型都要好，但是在没有学过图像中类似姿势情况下的图像检索性能明显差于明确姿态估计的方法。</p>
+<img src="/2017/04/26/paper-notes-thin-slicing/mpii.jpg" alt="mpii.jpg" title="">
+</li>
+<li><p>在动作识别时，使用SVM做分类器。只是用embedding提取的特征时准确率很低，主要是学习时没有学习人与物体之间交互而只学习了人体姿势，但如果结合VGG-16和VGG-19提取的特征（即取FC2的输出）准确率比VGG原本的准确率要高。</p>
+<img src="/2017/04/26/paper-notes-thin-slicing/voc2012.jpg" alt="voc2012.jpg" title="">
+</li>
 </ol>
-<p>在每一个卷积层之后，激活层之前均使用batch normalization。<br>根据 <a href="https://arxiv.org/abs/1502.01852" target="_blank" rel="external">https://arxiv.org/abs/1502.01852</a> 来初始化权值然后从零开始训练所有plain/残差网络。<br>我们使用的mini-batch的尺寸为256。学习率从0.1开始，每当错误率平稳时将学习率除以10，整个模型进行60∗10^4次迭代训练。我们将权值衰减设置为0.0001，动量为0.9。不使用dropout</p>
-<p>在测试中，采取标准的10-crop（四角+中心*翻转）测试。<br>同时使用全卷积形式，并在多个尺度（{224,256,384,480,640}）的结果上取平均分。</p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>这个在姿态相关的图像检索上能直接应用，对于动作识别来说更多的是作为辅助的特征提取方式。</p>
 
       
     </div>
@@ -365,6 +370,8 @@
           
             <a href="/tags/PaperNotes/" rel="tag">#PaperNotes</a>
           
+            <a href="/tags/CVPR16/" rel="tag">#CVPR16</a>
+          
         </div>
       
 
@@ -372,16 +379,12 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/04/26/paper-notes-thin-slicing/" rel="next" title="Thin-Slicing for Pose - Learning to Understand Pose without Explicit Pose Estimation - 论文笔记">
-                <i class="fa fa-chevron-left"></i> Thin-Slicing for Pose - Learning to Understand Pose without Explicit Pose Estimation - 论文笔记
-              </a>
-            
           </div>
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2017/04/20/paper-notes-inceptionv1/" rel="prev" title="Going deeper with convolutions - 论文笔记">
-                Going deeper with convolutions - 论文笔记 <i class="fa fa-chevron-right"></i>
+              <a href="/2017/04/23/paper-notes-resnet/" rel="prev" title="Deep Residual Learning for Image Recognition - 论文笔记">
+                Deep Residual Learning for Image Recognition - 论文笔记 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -397,10 +400,10 @@
 
     <div class="post-spread">
       
-        <div class="ds-share flat" data-thread-key="2017/04/23/paper-notes-resnet/"
-     data-title="Deep Residual Learning for Image Recognition - 论文笔记"
+        <div class="ds-share flat" data-thread-key="2017/04/26/paper-notes-thin-slicing/"
+     data-title="Thin-Slicing for Pose - Learning to Understand Pose without Explicit Pose Estimation - 论文笔记"
      data-content=""
-     data-url="http://wentaoma.com/2017/04/23/paper-notes-resnet/">
+     data-url="http://wentaoma.com/2017/04/26/paper-notes-thin-slicing/">
   <div class="ds-share-inline">
     <ul  class="ds-share-icons-16">
 
@@ -427,8 +430,8 @@
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2017/04/23/paper-notes-resnet/"
-           data-title="Deep Residual Learning for Image Recognition - 论文笔记" data-url="http://wentaoma.com/2017/04/23/paper-notes-resnet/">
+      <div class="ds-thread" data-thread-key="2017/04/26/paper-notes-thin-slicing/"
+           data-title="Thin-Slicing for Pose - Learning to Understand Pose without Explicit Pose Estimation - 论文笔记" data-url="http://wentaoma.com/2017/04/26/paper-notes-thin-slicing/">
       </div>
     
   </div>
@@ -512,7 +515,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#论文背景"><span class="nav-number">1.</span> <span class="nav-text">论文背景</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#到底什么是深度残差学习"><span class="nav-number">2.</span> <span class="nav-text">到底什么是深度残差学习</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#网络结构"><span class="nav-number">3.</span> <span class="nav-text">网络结构</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#实现细节"><span class="nav-number">4.</span> <span class="nav-text">实现细节</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#引言"><span class="nav-number">1.</span> <span class="nav-text">引言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#相关工作"><span class="nav-number">2.</span> <span class="nav-text">相关工作</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#算法概览"><span class="nav-number">3.</span> <span class="nav-text">算法概览</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#网络结构"><span class="nav-number">3.1.</span> <span class="nav-text">网络结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Triplet-rank-loss"><span class="nav-number">3.2.</span> <span class="nav-text">Triplet rank loss</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#数据集"><span class="nav-number">4.</span> <span class="nav-text">数据集</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#数据源"><span class="nav-number">4.1.</span> <span class="nav-text">数据源</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#图像和姿态标准化"><span class="nav-number">4.2.</span> <span class="nav-text">图像和姿态标准化</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Learning-pose-embedding-network"><span class="nav-number">5.</span> <span class="nav-text">Learning pose embedding network</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Triplet-sampling"><span class="nav-number">5.1.</span> <span class="nav-text">Triplet sampling</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Learning-network-with-random-triplets"><span class="nav-number">5.2.</span> <span class="nav-text">Learning network with random triplets</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#实验"><span class="nav-number">6.</span> <span class="nav-text">实验</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#实现细节"><span class="nav-number">6.1.</span> <span class="nav-text">实现细节</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实验结果"><span class="nav-number">6.2.</span> <span class="nav-text">实验结果</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#总结"><span class="nav-number">7.</span> <span class="nav-text">总结</span></a></li></ol></div>
             
           </div>
         </section>

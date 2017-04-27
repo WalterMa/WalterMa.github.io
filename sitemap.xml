@@ -2,6 +2,34 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://wentaoma.com/2016/07/31/hello-world/</loc>
+    
+    <lastmod>2017-04-27T02:25:09.585Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://wentaoma.com/2016/08/04/JS-inherit-conclusion/</loc>
+    
+    <lastmod>2017-04-27T02:20:18.059Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://wentaoma.com/2016/08/05/JS-function-scope-chain/</loc>
+    
+    <lastmod>2017-04-27T02:19:35.130Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://wentaoma.com/2017/04/26/paper-notes-thin-slicing/</loc>
+    
+    <lastmod>2017-04-27T02:17:06.653Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://wentaoma.com/2017/04/23/paper-notes-resnet/</loc>
     
     <lastmod>2017-04-23T08:12:02.870Z</lastmod>
@@ -58,30 +86,9 @@
   </url>
   
   <url>
-    <loc>http://wentaoma.com/2016/08/05/JS-function-scope-chain/</loc>
-    
-    <lastmod>2016-08-05T04:58:52.674Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://wentaoma.com/2016/08/04/JS-inherit-conclusion/</loc>
-    
-    <lastmod>2016-08-04T11:07:24.288Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://wentaoma.com/tags/index.html</loc>
     
     <lastmod>2016-07-31T08:27:05.765Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://wentaoma.com/2016/07/31/hello-world/</loc>
-    
-    <lastmod>2016-07-31T08:22:02.413Z</lastmod>
     
   </url>
   

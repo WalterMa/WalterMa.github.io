@@ -85,6 +85,7 @@
 
 
 <meta name="description" content="CSS样式应用到元素上的规则可以简述为：先将所有样式按来源、权重排序；然后取权重高的样式，权重相同的样式根据“就近原则”应用。我们先从选择器权重说起：">
+<meta name="keywords" content="CSS">
 <meta property="og:type" content="article">
 <meta property="og:title" content="CSS选择器权重及样式优先级">
 <meta property="og:url" content="http://wentaoma.com/2016/08/19/CSS-selector-weight/index.html">
@@ -307,28 +308,28 @@
 
       
         <p>CSS样式应用到元素上的规则可以简述为：先将所有样式按来源、权重排序；然后取权重高的样式，权重相同的样式根据“就近原则”应用。<br>我们先从选择器权重说起：<br><a id="more"></a></p>
-<h2 id="CSS_u9009_u62E9_u5668_u6743_u91CD"><a href="#CSS_u9009_u62E9_u5668_u6743_u91CD" class="headerlink" title="CSS选择器权重"></a>CSS选择器权重</h2><p>从高到低可以将CSS选择器权重排列如下：</p>
+<h2 id="CSS选择器权重"><a href="#CSS选择器权重" class="headerlink" title="CSS选择器权重"></a>CSS选择器权重</h2><p>从高到低可以将CSS选择器权重排列如下：</p>
 <p><strong>1. 内联样式<code>inline-style</code>权重最高，权值可以记为1000</strong></p>
 <p><strong>2. ID选择器，权值记为100</strong></p>
 <p><strong>3. Class选择器、属性选择器、伪类选择器，权值记为10</strong></p>
 <p><strong>4. 元素、伪元素选择器，权值记为1</strong></p>
 <p><strong>5. 通配符选择器<code>*</code>，权值为0(为什么记为0而不是无权重见下方)，结合符(空格、+，&gt;)不计入权重</strong></p>
-<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">h1</span> <span class="rules">&#123;<span class="rule"><span class="attribute">color</span>:<span class="value"> red</span></span>;&#125;</span> <span class="comment">/*权重=0001*/</span></span><br><span class="line"><span class="tag">p</span><span class="class">.siderbar</span> &gt; <span class="tag">em</span> <span class="rules">&#123;<span class="rule"><span class="attribute">color</span>:<span class="value"> purple</span></span>;&#125;</span> <span class="comment">/*权重=0012*/</span></span><br><span class="line"><span class="class">.clearfloat</span><span class="pseudo">:after</span> <span class="rules">&#123;<span class="rule"><span class="attribute">content</span>:<span class="value"><span class="string">""</span></span></span>;<span class="rule"><span class="attribute">display</span>:<span class="value">block</span></span>;<span class="rule"><span class="attribute">clear</span>:<span class="value">both</span></span>;&#125;</span> <span class="comment">/*权重=0020*/</span></span><br><span class="line"><span class="tag">li</span><span class="id">#answer</span> <span class="rules">&#123;<span class="rule"><span class="attribute">color</span>:<span class="value">navy</span></span>;&#125;</span> <span class="comment">/*权重=0101*/</span></span><br></pre></td></tr></table></figure>
-<h3 id="u6CE8_u610F_u4E8B_u9879"><a href="#u6CE8_u610F_u4E8B_u9879" class="headerlink" title="注意事项"></a><em>注意事项</em></h3><p><strong>1. 使用属性选择器选择ID，其权重仍为10，如：</strong></p>
-<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">ul</span> &gt; <span class="tag">li</span><span class="attr_selector">[id="answer"]</span> <span class="rules">&#123;<span class="rule"><span class="attribute">color</span>:<span class="value">navy</span></span>;&#125;</span> <span class="comment">/*权重=0012*/</span></span><br><span class="line"><span class="tag">li</span><span class="id">#answer</span> <span class="rules">&#123;<span class="rule"><span class="attribute">color</span>:<span class="value">navy</span></span>;&#125;</span> <span class="comment">/*权重=0101*/</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="selector-tag">h1</span> &#123;<span class="attribute">color</span>: red;&#125; <span class="comment">/*权重=0001*/</span></div><div class="line"><span class="selector-tag">p</span><span class="selector-class">.siderbar</span> &gt; <span class="selector-tag">em</span> &#123;<span class="attribute">color</span>: purple;&#125; <span class="comment">/*权重=0012*/</span></div><div class="line"><span class="selector-class">.clearfloat</span><span class="selector-pseudo">:after</span> &#123;<span class="attribute">content</span>:<span class="string">""</span>;<span class="attribute">display</span>:block;<span class="attribute">clear</span>:both;&#125; <span class="comment">/*权重=0020*/</span></div><div class="line"><span class="selector-tag">li</span><span class="selector-id">#answer</span> &#123;<span class="attribute">color</span>:navy;&#125; <span class="comment">/*权重=0101*/</span></div></pre></td></tr></table></figure>
+<h3 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a><em>注意事项</em></h3><p><strong>1. 使用属性选择器选择ID，其权重仍为10，如：</strong></p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="selector-tag">ul</span> &gt; <span class="selector-tag">li</span><span class="selector-attr">[id="answer"]</span> &#123;<span class="attribute">color</span>:navy;&#125; <span class="comment">/*权重=0012*/</span></div><div class="line"><span class="selector-tag">li</span><span class="selector-id">#answer</span> &#123;<span class="attribute">color</span>:navy;&#125; <span class="comment">/*权重=0101*/</span></div></pre></td></tr></table></figure>
 <p><strong>2. 权重值不会进位，即使有10个元素选择器，其权重也不如一个Class选择器权重高，即<code>000(10)&lt;0010</code></strong></p>
 <p><strong>3. 拥有<code>!important</code>声明的样式声明其权重单独计算</strong></p>
 <p>如果一个重要声明(有<code>!important</code>)权重和非重要声明(无<code>!important</code>)冲突，重要声明优先，如：</p>
-<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">h1</span> <span class="rules">&#123;<span class="rule"><span class="attribute">color</span>:<span class="value">red <span class="important">!important</span></span></span>;&#125;</span></span><br><span class="line"><span class="id">#title</span> <span class="rules">&#123;<span class="rule"><span class="attribute">color</span>:<span class="value">yellow <span class="important">!important</span></span></span>;&#125;</span></span><br></pre></td></tr></table></figure>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="title">h1</span> <span class="attribute">id</span>=<span class="value">"title"</span> <span class="attribute">style</span>=<span class="value">"color:black"</span>&gt;</span>Final Color is YELLOW<span class="tag">&lt;/<span class="title">h1</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="selector-tag">h1</span> &#123;<span class="attribute">color</span>:red <span class="meta">!important</span>;&#125;</div><div class="line"><span class="selector-id">#title</span> &#123;<span class="attribute">color</span>:yellow <span class="meta">!important</span>;&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">h1</span> <span class="attr">id</span>=<span class="string">"title"</span> <span class="attr">style</span>=<span class="string">"color:black"</span>&gt;</span>Final Color is YELLOW<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></div></pre></td></tr></table></figure>
 <p>两个重要声明，第二个<code>#title</code>权重更高，且都优先于内联非重要声明的样式。</p>
 <p><strong>4. (默认)继承的样式没有权重，会被通配符样式(0权重)覆盖，如：</strong></p>
-<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">* <span class="rules">&#123;<span class="rule"><span class="attribute">color</span>:<span class="value">yellow</span></span>;&#125;</span></span><br><span class="line"><span class="tag">h1</span> <span class="rules">&#123;<span class="rule"><span class="attribute">color</span>:<span class="value">red</span></span>;&#125;</span></span><br></pre></td></tr></table></figure>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="title">h1</span>&gt;</span>RED and <span class="tag">&lt;<span class="title">em</span>&gt;</span>YELLOW<span class="tag">&lt;/<span class="title">em</span>&gt;</span><span class="tag">&lt;/<span class="title">h1</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">* &#123;<span class="attribute">color</span>:yellow;&#125;</div><div class="line"><span class="selector-tag">h1</span> &#123;<span class="attribute">color</span>:red;&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">h1</span>&gt;</span>RED and <span class="tag">&lt;<span class="name">em</span>&gt;</span>YELLOW<span class="tag">&lt;/<span class="name">em</span>&gt;</span><span class="tag">&lt;/<span class="name">h1</span>&gt;</span></div></pre></td></tr></table></figure>
 <p><code>em</code>元素继承了<code>h1</code>的color样式，但是因为其无权重，所以会被<code>* {color:yellow;}</code>覆盖。<br>所以通配符选择器往往有一种短路继承的效果。</p>
 <p>但是如果在样式中明确指定使用继承属性值，就要看选择器的权重来决定了。比如在上述CSS中加入<code>em{color:inherit;}</code><br><code>em</code>标签文本就显示为继承下来的红色。</p>
-<iframe width="100%" height="300" src="http://jsfiddle.net/vcdvuv5p/embedded/css,html,result/light" frameborder="0" allowfullscreen></iframe>
-<h2 id="CSS_u6837_u5F0F_u5E94_u7528_u4F18_u5148_u7EA7_u5206_u6790"><a href="#CSS_u6837_u5F0F_u5E94_u7528_u4F18_u5148_u7EA7_u5206_u6790" class="headerlink" title="CSS样式应用优先级分析"></a>CSS样式应用优先级分析</h2><p>了解了选择器权重之后，我们就可以来看一下CSS到底是怎么选择某个元素样式的：</p>
+<iframe scrolling="no" width="100%" height="300" src="//jsfiddle.net/vcdvuv5p/embedded/css,html,result/light" frameborder="0" allowfullscreen></iframe>
+<h2 id="CSS样式应用优先级分析"><a href="#CSS样式应用优先级分析" class="headerlink" title="CSS样式应用优先级分析"></a>CSS样式应用优先级分析</h2><p>了解了选择器权重之后，我们就可以来看一下CSS到底是怎么选择某个元素样式的：</p>
 <ol>
 <li><p><strong>列出每一条样式规则，每条规则都含有一个匹配给定元素的选择器</strong></p>
 </li>
@@ -361,9 +362,9 @@
 <li><p><strong>按照样式声明出现的顺序给其排序</strong></p>
 <p> 在相同权重下，样式声明离被设置元素越近优先级别越高，即“就近原则”。</p>
 <p> 由于这个原因，才有了推荐的链接样式排序(link-visited-hover-active, LVHA)</p>
- <figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="pseudo">:link</span> <span class="rules">&#123;<span class="rule"><span class="attribute">color</span>:<span class="value">blue</span></span>;&#125;</span></span><br><span class="line"><span class="pseudo">:visited</span> <span class="rules">&#123;<span class="rule"><span class="attribute">color</span>:<span class="value">purple</span></span>;&#125;</span></span><br><span class="line"><span class="pseudo">:hover</span> <span class="rules">&#123;<span class="rule"><span class="attribute">color</span>:<span class="value">red</span></span>;&#125;</span></span><br><span class="line"><span class="pseudo">:active</span> <span class="rules">&#123;<span class="rule"><span class="attribute">color</span>:<span class="value">orange</span></span>;&#125;</span></span><br></pre></td></tr></table></figure>
+ <figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="selector-pseudo">:link</span> &#123;<span class="attribute">color</span>:blue;&#125;</div><div class="line"><span class="selector-pseudo">:visited</span> &#123;<span class="attribute">color</span>:purple;&#125;</div><div class="line"><span class="selector-pseudo">:hover</span> &#123;<span class="attribute">color</span>:red;&#125;</div><div class="line"><span class="selector-pseudo">:active</span> &#123;<span class="attribute">color</span>:orange;&#125;</div></pre></td></tr></table></figure>
 <p> 上述顺序如果换成：</p>
- <figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="pseudo">:active</span> <span class="rules">&#123;<span class="rule"><span class="attribute">color</span>:<span class="value">orange</span></span>;&#125;</span></span><br><span class="line"><span class="pseudo">:hover</span> <span class="rules">&#123;<span class="rule"><span class="attribute">color</span>:<span class="value">red</span></span>;&#125;</span></span><br><span class="line"><span class="pseudo">:link</span> <span class="rules">&#123;<span class="rule"><span class="attribute">color</span>:<span class="value">blue</span></span>;&#125;</span></span><br><span class="line"><span class="pseudo">:visited</span> <span class="rules">&#123;<span class="rule"><span class="attribute">color</span>:<span class="value">purple</span></span>;&#125;</span></span><br></pre></td></tr></table></figure>
+ <figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="selector-pseudo">:active</span> &#123;<span class="attribute">color</span>:orange;&#125;</div><div class="line"><span class="selector-pseudo">:hover</span> &#123;<span class="attribute">color</span>:red;&#125;</div><div class="line"><span class="selector-pseudo">:link</span> &#123;<span class="attribute">color</span>:blue;&#125;</div><div class="line"><span class="selector-pseudo">:visited</span> &#123;<span class="attribute">color</span>:purple;&#125;</div></pre></td></tr></table></figure>
 <p> 则任何链接都不会显示<code>:hover</code>或<code>:active</code>样式。因为任何链接要么已访问，要么未访问，所以前两个样式会被覆盖。</p>
 </li>
 </ol>
@@ -398,16 +399,16 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/08/10/caffe-python-common-api-reference/" rel="next" title="Caffe-Python接口常用API参考">
-                <i class="fa fa-chevron-left"></i> Caffe-Python接口常用API参考
+              <a href="/2016/08/31/cmder-chinese-encode/" rel="next" title="cmder中文显示相关问题解决方案(1.3以上版本)">
+                <i class="fa fa-chevron-left"></i> cmder中文显示相关问题解决方案(1.3以上版本)
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2016/08/31/cmder-chinese-encode/" rel="prev" title="cmder中文显示相关问题解决方案(1.3以上版本)">
-                cmder中文显示相关问题解决方案(1.3以上版本) <i class="fa fa-chevron-right"></i>
+              <a href="/2016/08/10/caffe-python-common-api-reference/" rel="prev" title="Caffe-Python接口常用API参考">
+                Caffe-Python接口常用API参考 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -499,7 +500,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">11</span>
+              <span class="site-state-item-count">12</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -509,7 +510,7 @@
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">11</span>
+                <span class="site-state-item-count">12</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
@@ -538,7 +539,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#CSS_u9009_u62E9_u5668_u6743_u91CD"><span class="nav-number">1.</span> <span class="nav-text">CSS选择器权重</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#u6CE8_u610F_u4E8B_u9879"><span class="nav-number">1.1.</span> <span class="nav-text">注意事项</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CSS_u6837_u5F0F_u5E94_u7528_u4F18_u5148_u7EA7_u5206_u6790"><span class="nav-number">2.</span> <span class="nav-text">CSS样式应用优先级分析</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#CSS选择器权重"><span class="nav-number">1.</span> <span class="nav-text">CSS选择器权重</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#注意事项"><span class="nav-number">1.1.</span> <span class="nav-text">注意事项</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CSS样式应用优先级分析"><span class="nav-number">2.</span> <span class="nav-text">CSS样式应用优先级分析</span></a></li></ol></div>
             
           </div>
         </section>
