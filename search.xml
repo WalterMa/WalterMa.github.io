@@ -4,6 +4,33 @@
   
     
     <entry>
+      <title><![CDATA[DeepCAMP - Deep Convolutional Action & Attribute Mid-Level Patterns - 论文笔记]]></title>
+      <url>http://wentaoma.com/2017/04/30/paper-notes-deep-camp/</url>
+      <content type="html"><![CDATA[<p>CVPR16论文，结合discriminative patch和整张图片信息进行人体动作和属性识别<br><a id="more"></a></p>
+<h1 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h1><p>最近DNN大大增加了计算机识别物体的能力，但是分析人类动作和属性仍然表现不佳。这是因为分析人类动作和属性是一个细粒度的分类问题，一方面图像小块区域可能包含关于物体外形和交互的重要信息，另一方面周围区域的整体上下文中也含有重要线索。这篇论文就展示了一种通过识别图像区块(patch)以导出这种信息的CNN的新设计。</p>
+<p>关注图像区块或图像部分的想法在计算机视觉领域并不是一个新想法，应用到人体动作和属性上也并不新鲜。相关论文有：<br>Expanded parts model for human attribute and action recognition in still images - CVPR13<br>Human action recognition by learning bases of action attributes and parts - ICCV11<br>其中第一篇论文展示了一个无需人体姿态估计和身体部分检测器(body part detectors)的人类行为分类的优良方法。</p>
+<p>事实上，一种替代方法是捕获具有判别性(discriminative)的图像区块。这篇文章的主题就是挖掘这些能用于行为和属性分析的图像区块。</p>
+<h1 id="相关工作"><a href="#相关工作" class="headerlink" title="相关工作"></a>相关工作</h1><p>略</p>
+<h1 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h1><h2 id="Training-Pipeline"><a href="#Training-Pipeline" class="headerlink" title="Training Pipeline"></a>Training Pipeline</h2><img src="/2017/04/30/paper-notes-deep-camp/pipeline.jpg" alt="pipeline.jpg" title="">
+<p><strong>Initial feature extraction and clustering</strong>：论文使用Mid-Level Deep Pattern Mining (MDPM)来提取patch和进行聚类。<br><strong>Training patch clusters CNN</strong>：训练一个新的 CNN ，当给定图像 patch的时，可以预测 cluster 的 label。<br><strong>Updating clusters</strong>：使用上一步训练的CNN全连接层输出做为新的特征，利用 MDPM算法再一次的更新 clusters 以得到一个更好的 clusters 的集合。<br><strong>Harvesting patches</strong>：通过阈值化 LDA 分类器为每一个cluster产生的置信值来移除不适合任何 cluster的patches以清理 clusters。</p>
+<p>上述过程总结如下：<br><img src="/2017/04/30/paper-notes-deep-camp/algo.jpg" alt="algo.jpg" title=""></p>
+<p><em>PS：这篇文章比较简略，待日后补完</em></p>
+]]></content>
+      
+        
+        <tags>
+            
+            <tag> DeepLearning </tag>
+            
+            <tag> PaperNotes </tag>
+            
+            <tag> CVPR16 </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
       <title><![CDATA[Thin-Slicing for Pose - Learning to Understand Pose without Explicit Pose Estimation - 论文笔记]]></title>
       <url>http://wentaoma.com/2017/04/26/paper-notes-thin-slicing/</url>
       <content type="html"><![CDATA[<p>这篇文章主要使用了DCNN构造了一个嵌入函数(embedding function)，能够感受姿态并将相似姿态的人投影到嵌入空间邻近区域中。作者说其结构能有效剔除服装、背景、和成像因素以学习鲁棒的人体姿态特征。对于各种姿态相关任务，这种方法计算高效并且不需要明确的估计姿势，绕过了定位关节的问题。作者还给出采用此方法的图像检索和姿态识别的例子。<br><a id="more"></a></p>

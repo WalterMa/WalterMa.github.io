@@ -68,7 +68,7 @@
 <link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="cmder," />
+  <meta name="keywords" content="DeepLearning,PaperNotes,CVPR16," />
 
 
 
@@ -84,19 +84,20 @@
 
 
 
-<meta name="description" content="cmder虽然Windows命令行的进阶版，虽然好看易用，但其中文编码一直是个问题。网上有不少博客给出解决方案，大部分都已因为版本更新失效。本文解决方案针对1.3以上版本的cmder用户">
-<meta name="keywords" content="cmder">
+<meta name="description" content="CVPR16论文，结合discriminative patch和整张图片信息进行人体动作和属性识别">
+<meta name="keywords" content="DeepLearning,PaperNotes,CVPR16">
 <meta property="og:type" content="article">
-<meta property="og:title" content="cmder中文显示相关问题解决方案(1.3以上版本)">
-<meta property="og:url" content="http://wentaoma.com/2016/08/31/cmder-chinese-encode/index.html">
+<meta property="og:title" content="DeepCAMP - Deep Convolutional Action & Attribute Mid-Level Patterns - 论文笔记">
+<meta property="og:url" content="http://wentaoma.com/2017/04/30/paper-notes-deep-camp/index.html">
 <meta property="og:site_name" content="Wentao">
-<meta property="og:description" content="cmder虽然Windows命令行的进阶版，虽然好看易用，但其中文编码一直是个问题。网上有不少博客给出解决方案，大部分都已因为版本更新失效。本文解决方案针对1.3以上版本的cmder用户">
-<meta property="og:image" content="http://wentaoma.com/2016/08/31/cmder-chinese-encode/cmder-cn-encode.png">
-<meta property="og:updated_time" content="2016-08-31T07:29:29.305Z">
+<meta property="og:description" content="CVPR16论文，结合discriminative patch和整张图片信息进行人体动作和属性识别">
+<meta property="og:image" content="http://wentaoma.com/2017/04/30/paper-notes-deep-camp/pipeline.jpg">
+<meta property="og:image" content="http://wentaoma.com/2017/04/30/paper-notes-deep-camp/algo.jpg">
+<meta property="og:updated_time" content="2017-04-30T12:50:52.902Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="cmder中文显示相关问题解决方案(1.3以上版本)">
-<meta name="twitter:description" content="cmder虽然Windows命令行的进阶版，虽然好看易用，但其中文编码一直是个问题。网上有不少博客给出解决方案，大部分都已因为版本更新失效。本文解决方案针对1.3以上版本的cmder用户">
-<meta name="twitter:image" content="http://wentaoma.com/2016/08/31/cmder-chinese-encode/cmder-cn-encode.png">
+<meta name="twitter:title" content="DeepCAMP - Deep Convolutional Action & Attribute Mid-Level Patterns - 论文笔记">
+<meta name="twitter:description" content="CVPR16论文，结合discriminative patch和整张图片信息进行人体动作和属性识别">
+<meta name="twitter:image" content="http://wentaoma.com/2017/04/30/paper-notes-deep-camp/pipeline.jpg">
 
 
 
@@ -117,9 +118,9 @@
 
 
 
-  <link rel="canonical" href="http://wentaoma.com/2016/08/31/cmder-chinese-encode/"/>
+  <link rel="canonical" href="http://wentaoma.com/2017/04/30/paper-notes-deep-camp/"/>
 
-  <title> cmder中文显示相关问题解决方案(1.3以上版本) | Wentao </title>
+  <title> DeepCAMP - Deep Convolutional Action & Attribute Mid-Level Patterns - 论文笔记 | Wentao </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -262,7 +263,7 @@
             
             
               
-                cmder中文显示相关问题解决方案(1.3以上版本)
+                DeepCAMP - Deep Convolutional Action & Attribute Mid-Level Patterns - 论文笔记
               
             
           </h1>
@@ -274,8 +275,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-08-31T14:32:05+08:00" content="2016-08-31">
-              2016-08-31
+            <time itemprop="dateCreated" datetime="2017-04-30T16:49:14+08:00" content="2017-04-30">
+              2017-04-30
             </time>
           </span>
 
@@ -285,8 +286,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2016/08/31/cmder-chinese-encode/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/08/31/cmder-chinese-encode/" itemprop="commentsCount"></span>
+                <a href="/2017/04/30/paper-notes-deep-camp/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/04/30/paper-notes-deep-camp/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -309,34 +310,15 @@
       
 
       
-        <p>cmder虽然Windows命令行的进阶版，虽然好看易用，但其中文编码一直是个问题。网上有不少博客给出解决方案，大部分都已因为版本更新失效。<br>本文解决方案针对1.3以上版本的cmder用户<br><a id="more"></a></p>
-<h2 id="中文字体重叠问题"><a href="#中文字体重叠问题" class="headerlink" title="中文字体重叠问题"></a>中文字体重叠问题</h2><h3 id="错误方案："><a href="#错误方案：" class="headerlink" title="错误方案："></a>错误方案：</h3><blockquote>
-<p>需要取消勾选设置中的<code>Monospace</code>选项</p>
-</blockquote>
-<h3 id="正确方案"><a href="#正确方案" class="headerlink" title="正确方案:"></a>正确方案:</h3><p>这个问题在<code>cmder v1.3.0</code>以上版本中已经修复，不需要进行任何操作</p>
-<h2 id="ls命令中文路径-文件名乱码"><a href="#ls命令中文路径-文件名乱码" class="headerlink" title="ls命令中文路径/文件名乱码"></a><code>ls</code>命令中文路径/文件名乱码</h2><h3 id="错误方案：-1"><a href="#错误方案：-1" class="headerlink" title="错误方案："></a>错误方案：</h3><blockquote>
-<p>添加4行命令到cmder/config/aliases文件末尾…</p>
-</blockquote>
-<p>在<code>cmder v1.3.0</code>以上版本初始创建的<code>cmder/config/user-aliases.cmd</code>文件中已经包含：</p>
-<figure class="highlight bat"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ls=ls --show-control-chars -F --<span class="built_in">color</span> $*</div></pre></td></tr></table></figure>
-<p>不需要添加其它命令（实际上添加了也没有效果）</p>
-<h3 id="正确方案-1"><a href="#正确方案-1" class="headerlink" title="正确方案:"></a>正确方案:</h3><ol>
-<li><p><code>win+ctrl+p</code>打开Settings</p>
-</li>
-<li><p>在Settings &gt; Startup &gt; Environment里添加：<code>set LANG=zh_CN.UTF8</code></p>
-</li>
-</ol>
-<p><strong>PS：</strong></p>
-<p>这样修改过<code>ls</code>可以正确显示中文，但<code>ls |more</code>还是会出现乱码。<br>如果改为<code>set LANG=zh_CN.GBK</code>可以解决这个问题。</p>
-<p><strong>PPS：</strong></p>
-<p>因为<code>cat</code>命令读取文件的编码与此有关，如果改为GBK则<code>cat</code>一个UTF8文件会显示乱码，<br>如果改为UTF8则<code>cat</code>一个GBK文件会显示乱码，<br>具体设置还是看你环境中常用编码。</p>
-<h2 id="cd进一个中文目录，中文路径名显示乱码"><a href="#cd进一个中文目录，中文路径名显示乱码" class="headerlink" title="cd进一个中文目录，中文路径名显示乱码"></a><code>cd</code>进一个中文目录，中文路径名显示乱码</h2><p>经过上述设置，cmder一般情况下都能正常显示中文</p>
-<p>但是如果你进入一个中文路径的话，cmder的路径的中文仍然是乱码<br>好在已经有人解决了这个问题</p>
-<p><a href="https://github.com/cmderdev/cmder/pull/1070" target="_blank" rel="external">Parse the original prompt for cwd and env names by janschulz · Pull Request #1070 · cmderdev/cmder · GitHub</a></p>
-<h3 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h3><p>只需下载最新的Release（目前是1.3.1）：<br><a href="https://github.com/cmderdev/cmder/releases" target="_blank" rel="external">Releases · cmderdev/cmder · GitHub</a></p>
-<p>然后解压覆盖就好</p>
-<p>最后附上一张配置完成的示意图:</p>
-<img src="/2016/08/31/cmder-chinese-encode/cmder-cn-encode.png" alt="cmder-cn-encode.png" title="">
+        <p>CVPR16论文，结合discriminative patch和整张图片信息进行人体动作和属性识别<br><a id="more"></a></p>
+<h1 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h1><p>最近DNN大大增加了计算机识别物体的能力，但是分析人类动作和属性仍然表现不佳。这是因为分析人类动作和属性是一个细粒度的分类问题，一方面图像小块区域可能包含关于物体外形和交互的重要信息，另一方面周围区域的整体上下文中也含有重要线索。这篇论文就展示了一种通过识别图像区块(patch)以导出这种信息的CNN的新设计。</p>
+<p>关注图像区块或图像部分的想法在计算机视觉领域并不是一个新想法，应用到人体动作和属性上也并不新鲜。相关论文有：<br>Expanded parts model for human attribute and action recognition in still images - CVPR13<br>Human action recognition by learning bases of action attributes and parts - ICCV11<br>其中第一篇论文展示了一个无需人体姿态估计和身体部分检测器(body part detectors)的人类行为分类的优良方法。</p>
+<p>事实上，一种替代方法是捕获具有判别性(discriminative)的图像区块。这篇文章的主题就是挖掘这些能用于行为和属性分析的图像区块。</p>
+<h1 id="相关工作"><a href="#相关工作" class="headerlink" title="相关工作"></a>相关工作</h1><p>略</p>
+<h1 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h1><h2 id="Training-Pipeline"><a href="#Training-Pipeline" class="headerlink" title="Training Pipeline"></a>Training Pipeline</h2><img src="/2017/04/30/paper-notes-deep-camp/pipeline.jpg" alt="pipeline.jpg" title="">
+<p><strong>Initial feature extraction and clustering</strong>：论文使用Mid-Level Deep Pattern Mining (MDPM)来提取patch和进行聚类。<br><strong>Training patch clusters CNN</strong>：训练一个新的 CNN ，当给定图像 patch的时，可以预测 cluster 的 label。<br><strong>Updating clusters</strong>：使用上一步训练的CNN全连接层输出做为新的特征，利用 MDPM算法再一次的更新 clusters 以得到一个更好的 clusters 的集合。<br><strong>Harvesting patches</strong>：通过阈值化 LDA 分类器为每一个cluster产生的置信值来移除不适合任何 cluster的patches以清理 clusters。</p>
+<p>上述过程总结如下：<br><img src="/2017/04/30/paper-notes-deep-camp/algo.jpg" alt="algo.jpg" title=""></p>
+<p><em>PS：这篇文章比较简略，待日后补完</em></p>
 
       
     </div>
@@ -359,7 +341,11 @@
       
         <div class="post-tags">
           
-            <a href="/tags/cmder/" rel="tag">#cmder</a>
+            <a href="/tags/DeepLearning/" rel="tag">#DeepLearning</a>
+          
+            <a href="/tags/PaperNotes/" rel="tag">#PaperNotes</a>
+          
+            <a href="/tags/CVPR16/" rel="tag">#CVPR16</a>
           
         </div>
       
@@ -368,16 +354,12 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/04/17/paper-notes-alexnet/" rel="next" title="ImageNet Classification with Deep ConvolutionalNeural Networks - 论文笔记">
-                <i class="fa fa-chevron-left"></i> ImageNet Classification with Deep ConvolutionalNeural Networks - 论文笔记
-              </a>
-            
           </div>
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2016/08/19/CSS-selector-weight/" rel="prev" title="CSS选择器权重及样式优先级">
-                CSS选择器权重及样式优先级 <i class="fa fa-chevron-right"></i>
+              <a href="/2017/04/26/paper-notes-thin-slicing/" rel="prev" title="Thin-Slicing for Pose - Learning to Understand Pose without Explicit Pose Estimation - 论文笔记">
+                Thin-Slicing for Pose - Learning to Understand Pose without Explicit Pose Estimation - 论文笔记 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -393,10 +375,10 @@
 
     <div class="post-spread">
       
-        <div class="ds-share flat" data-thread-key="2016/08/31/cmder-chinese-encode/"
-     data-title="cmder中文显示相关问题解决方案(1.3以上版本)"
+        <div class="ds-share flat" data-thread-key="2017/04/30/paper-notes-deep-camp/"
+     data-title="DeepCAMP - Deep Convolutional Action & Attribute Mid-Level Patterns - 论文笔记"
      data-content=""
-     data-url="http://wentaoma.com/2016/08/31/cmder-chinese-encode/">
+     data-url="http://wentaoma.com/2017/04/30/paper-notes-deep-camp/">
   <div class="ds-share-inline">
     <ul  class="ds-share-icons-16">
 
@@ -423,8 +405,8 @@
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2016/08/31/cmder-chinese-encode/"
-           data-title="cmder中文显示相关问题解决方案(1.3以上版本)" data-url="http://wentaoma.com/2016/08/31/cmder-chinese-encode/">
+      <div class="ds-thread" data-thread-key="2017/04/30/paper-notes-deep-camp/"
+           data-title="DeepCAMP - Deep Convolutional Action & Attribute Mid-Level Patterns - 论文笔记" data-url="http://wentaoma.com/2017/04/30/paper-notes-deep-camp/">
       </div>
     
   </div>
@@ -508,7 +490,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#中文字体重叠问题"><span class="nav-number">1.</span> <span class="nav-text">中文字体重叠问题</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#错误方案："><span class="nav-number">1.1.</span> <span class="nav-text">错误方案：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#正确方案"><span class="nav-number">1.2.</span> <span class="nav-text">正确方案:</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ls命令中文路径-文件名乱码"><span class="nav-number">2.</span> <span class="nav-text">ls命令中文路径/文件名乱码</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#错误方案：-1"><span class="nav-number">2.1.</span> <span class="nav-text">错误方案：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#正确方案-1"><span class="nav-number">2.2.</span> <span class="nav-text">正确方案:</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#cd进一个中文目录，中文路径名显示乱码"><span class="nav-number">3.</span> <span class="nav-text">cd进一个中文目录，中文路径名显示乱码</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#解决方案"><span class="nav-number">3.1.</span> <span class="nav-text">解决方案</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#引言"><span class="nav-number">1.</span> <span class="nav-text">引言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#相关工作"><span class="nav-number">2.</span> <span class="nav-text">相关工作</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#方法"><span class="nav-number">3.</span> <span class="nav-text">方法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Training-Pipeline"><span class="nav-number">3.1.</span> <span class="nav-text">Training Pipeline</span></a></li></ol></li></ol></div>
             
           </div>
         </section>
