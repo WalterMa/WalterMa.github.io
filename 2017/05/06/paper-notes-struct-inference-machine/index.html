@@ -68,7 +68,7 @@
 <link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="DeepLearning,PaperNotes,CVPR16," />
 
 
 
@@ -84,15 +84,22 @@
 
 
 
-<meta name="description" content="趴着，不动，写代码">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Wentao">
-<meta property="og:url" content="http://wentaoma.com/tags/CVPR16/index.html">
+<meta name="description" content="作者使用RNN构造了一个Structure Inference Machine，将分类器输出的图片中每个人和整张图片的概率分布（即sofmax层输出）做RNN输入，推理出整张图片的Group Activity。">
+<meta name="keywords" content="DeepLearning,PaperNotes,CVPR16">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Structure Inference Machines - Recurrent Neural Networks for Analyzing Relations in Group Activity Recognition - 论文笔记">
+<meta property="og:url" content="http://wentaoma.com/2017/05/06/paper-notes-struct-inference-machine/index.html">
 <meta property="og:site_name" content="Wentao">
-<meta property="og:description" content="趴着，不动，写代码">
+<meta property="og:description" content="作者使用RNN构造了一个Structure Inference Machine，将分类器输出的图片中每个人和整张图片的概率分布（即sofmax层输出）做RNN输入，推理出整张图片的Group Activity。">
+<meta property="og:image" content="http://wentaoma.com/2017/05/06/paper-notes-struct-inference-machine/fig1.jpg">
+<meta property="og:image" content="http://wentaoma.com/2017/05/06/paper-notes-struct-inference-machine/pipeline.jpg">
+<meta property="og:image" content="http://wentaoma.com/2017/05/06/paper-notes-struct-inference-machine/algorithm.jpg">
+<meta property="og:image" content="http://wentaoma.com/2017/05/06/paper-notes-struct-inference-machine/result.png">
+<meta property="og:updated_time" content="2017-05-06T07:19:37.238Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Wentao">
-<meta name="twitter:description" content="趴着，不动，写代码">
+<meta name="twitter:title" content="Structure Inference Machines - Recurrent Neural Networks for Analyzing Relations in Group Activity Recognition - 论文笔记">
+<meta name="twitter:description" content="作者使用RNN构造了一个Structure Inference Machine，将分类器输出的图片中每个人和整张图片的概率分布（即sofmax层输出）做RNN输入，推理出整张图片的Group Activity。">
+<meta name="twitter:image" content="http://wentaoma.com/2017/05/06/paper-notes-struct-inference-machine/fig1.jpg">
 
 
 
@@ -113,9 +120,9 @@
 
 
 
-  <link rel="canonical" href="http://wentaoma.com/tags/CVPR16/"/>
+  <link rel="canonical" href="http://wentaoma.com/2017/05/06/paper-notes-struct-inference-machine/"/>
 
-  <title> 标签: CVPR16 | Wentao </title>
+  <title> Structure Inference Machines - Recurrent Neural Networks for Analyzing Relations in Group Activity Recognition - 论文笔记 | Wentao </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -136,7 +143,7 @@
     
   
 
-  <div class="container one-collumn sidebar-position-left  ">
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -237,102 +244,169 @@
           <div id="content" class="content">
             
 
-  <div id="posts" class="posts-collapse">
-    <div class="collection-title">
-      <h2 >
-        CVPR16
-        <small>标签</small>
-      </h2>
-    </div>
-
+  <div id="posts" class="posts-expand">
     
-      
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h1 class="post-title">
-        
-            <a class="post-title-link" href="/2017/05/06/paper-notes-struct-inference-machine/" itemprop="url">
-              
-                <span itemprop="name">Structure Inference Machines - Recurrent Neural Networks for Analyzing Relations in Group Activity Recognition - 论文笔记</span>
-              
-            </a>
-        
-      </h1>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2017-05-06T13:29:11+08:00"
-              content="2017-05-06" >
-          05-06
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-    
-      
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h1 class="post-title">
-        
-            <a class="post-title-link" href="/2017/04/30/paper-notes-deep-camp/" itemprop="url">
-              
-                <span itemprop="name">DeepCAMP - Deep Convolutional Action & Attribute Mid-Level Patterns - 论文笔记</span>
-              
-            </a>
-        
-      </h1>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2017-04-30T16:49:14+08:00"
-              content="2017-04-30" >
-          04-30
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-    
-      
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h1 class="post-title">
-        
-            <a class="post-title-link" href="/2017/04/26/paper-notes-thin-slicing/" itemprop="url">
-              
-                <span itemprop="name">Thin-Slicing for Pose - Learning to Understand Pose without Explicit Pose Estimation - 论文笔记</span>
-              
-            </a>
-        
-      </h1>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2017-04-26T20:54:44+08:00"
-              content="2017-04-26" >
-          04-26
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-    
-  </div>
 
   
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Structure Inference Machines - Recurrent Neural Networks for Analyzing Relations in Group Activity Recognition - 论文笔记
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2017-05-06T13:29:11+08:00" content="2017-05-06">
+              2017-05-06
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2017/05/06/paper-notes-struct-inference-machine/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/05/06/paper-notes-struct-inference-machine/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>作者使用RNN构造了一个Structure Inference Machine，将分类器输出的图片中每个人和整张图片的概率分布（即sofmax层输出）做RNN输入，推理出整张图片的Group Activity。<br><a id="more"></a></p>
+<h1 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h1><p>图像实体之间的关系是更高层次的视觉理解的一个重要方面。构造如人之间的距离、相对运动、行为的关系可用于驱动更高层次活动的识别。成组活动(Group Activity)的分析包括对单个人的场景推理和考虑他们的关系。<br>作者就针对此提出了一种推理模型，搭建了从网络低层分类输出到高层信息组合的桥梁。其简易示意图如下所示：<br><img src="/2017/05/06/paper-notes-struct-inference-machine/fig1.jpg" alt="fig1.jpg" title=""></p>
+<h1 id="先前工作"><a href="#先前工作" class="headerlink" title="先前工作"></a>先前工作</h1><p><strong>Deep Learning with Structures</strong><br>最近，有几个有趣的办法来解决图形模型和深度神经网络相结合的问题，主要是在根据上下文的图像语义分割领域。<br>另一研究方向是，建立一个可以随同深度神经网络一起训练的表达类之间关系的图模型以。<br><strong>Group Activity Recognition</strong><br>成组活动识别通常建模为一个考虑同一场景中个人行动以及与他人的交互的结构化预测问题(structured prediction problem)，许多先前工作使用各种图形模型的形式来解决这个问题。</p>
+<h1 id="Structure-Inference-Machine"><a href="#Structure-Inference-Machine" class="headerlink" title="Structure Inference Machine"></a>Structure Inference Machine</h1><p>组活动识别需要推理结构。解释一个图像同一场景的人的行为包括确定每一个人在做什么和推理他们之间的(动作)关系。由于图像特征中的歧义和人之间的关系确定的不确定性，这些都是具有挑战性的任务。而推断同一场景中人之间关系结构的能力有助于抑制不准确的人体检测、错误的低级动作识别结果以及不参与某一个群体活动的无关人士所带来的噪声。</p>
+<p>本文我们解决的问题是如何建模这种结构关系。我们使用如下两个模块将问题变为神经网络的形式：</p>
+<ol>
+<li>Recurrent neural networks for message passing (整合图像中所有人的动作分类输出多次迭代输出优化后分类结果)</li>
+<li>Gating functions to learn structures (控制人之间联系的开与关)</li>
+</ol>
+<p>整体结构如下所示：<br><img src="/2017/05/06/paper-notes-struct-inference-machine/pipeline.jpg" alt="pipeline.jpg" title=""></p>
+<h1 id="方法详述"><a href="#方法详述" class="headerlink" title="方法详述"></a>方法详述</h1><img src="/2017/05/06/paper-notes-struct-inference-machine/algorithm.jpg" alt="algorithm.jpg" title="">
+<h1 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h1><p>作者在3个Dataset上进行了实验：</p>
+<ol>
+<li>Collective Activity Dataset (44 videos from 5 group activities (Crossing, Waiting, Queueing, Walking and Talking) and 6 individual actions (NA, Crossing, Waiting, Queueing, Walking and Talking). )</li>
+<li>Collective Activity Extended Dataset (omits the walking activity, due to ambiguities in its definition, and includes Jogging and Dancing categories.)</li>
+<li>Nursing Home Dataset (80 videos showing 6 actions (walking, standing, bending, squating, sitting, falling) and two scenes (fall, non-fall).)</li>
+</ol>
+<p>为了产生RNN所需的概率分布作者微调了AlexNet用于分类。</p>
+<img src="/2017/05/06/paper-notes-struct-inference-machine/result.png" alt="result.png" title="">
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/DeepLearning/" rel="tag">#DeepLearning</a>
+          
+            <a href="/tags/PaperNotes/" rel="tag">#PaperNotes</a>
+          
+            <a href="/tags/CVPR16/" rel="tag">#CVPR16</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/04/30/paper-notes-deep-camp/" rel="prev" title="DeepCAMP - Deep Convolutional Action & Attribute Mid-Level Patterns - 论文笔记">
+                DeepCAMP - Deep Convolutional Action & Attribute Mid-Level Patterns - 论文笔记 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <div class="ds-share flat" data-thread-key="2017/05/06/paper-notes-struct-inference-machine/"
+     data-title="Structure Inference Machines - Recurrent Neural Networks for Analyzing Relations in Group Activity Recognition - 论文笔记"
+     data-content=""
+     data-url="http://wentaoma.com/2017/05/06/paper-notes-struct-inference-machine/">
+  <div class="ds-share-inline">
+    <ul  class="ds-share-icons-16">
+
+      <li data-toggle="ds-share-icons-more"><a class="ds-more" href="javascript:void(0);">分享到：</a></li>
+      <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+      <li><a class="ds-qzone" href="javascript:void(0);" data-service="qzone">QQ空间</a></li>
+      <li><a class="ds-qqt" href="javascript:void(0);" data-service="qqt">腾讯微博</a></li>
+      <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+
+    </ul>
+    <div class="ds-share-icons-more">
+    </div>
+  </div>
+</div>
+      
+    </div>
+  </div>
 
 
           </div>
@@ -340,6 +414,14 @@
 
 
           
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2017/05/06/paper-notes-struct-inference-machine/"
+           data-title="Structure Inference Machines - Recurrent Neural Networks for Analyzing Relations in Group Activity Recognition - 论文笔记" data-url="http://wentaoma.com/2017/05/06/paper-notes-struct-inference-machine/">
+      </div>
+    
+  </div>
+
 
         </div>
         
@@ -359,8 +441,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel  sidebar-panel-active ">
+      <section class="site-overview sidebar-panel ">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="/uploads/avatar.jpg"
@@ -403,6 +494,17 @@
 
       </section>
 
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#引言"><span class="nav-text">引言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#先前工作"><span class="nav-text">先前工作</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Structure-Inference-Machine"><span class="nav-text">Structure Inference Machine</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#方法详述"><span class="nav-text">方法详述</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#实验"><span class="nav-text">实验</span></a></li></ol></div>
+            
+          </div>
+        </section>
       
 
     </div>
@@ -499,6 +601,10 @@
   
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
 
   
 
